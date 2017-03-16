@@ -3,7 +3,6 @@ package com.deonna.newssearch.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,16 +12,10 @@ import android.widget.GridView;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.network.NewYorkTimesClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -47,23 +40,25 @@ public class SearchActivity extends AppCompatActivity {
         String query = etQuery.getText().toString();
 
         NewYorkTimesClient client = new NewYorkTimesClient();
-
-        client.getArticlesFromQuery(query, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("DEBUG", response.toString());
-
-                JSONArray articleJsonResults;
-
-                try {
-                    articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-                    Log.d("ARTICLE RESULTS", articleJsonResults.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        client.getArticlesFromQuery(query);
+//        NewYorkTimesOldClient client = new NewYorkTimesOldClient();
+//
+//        client.getArticlesFromQuery(query, new JsonHttpResponseHandler() {
+//
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                Log.d("DEBUG", response.toString());
+//
+//                JSONArray articleJsonResults;
+//
+//                try {
+//                    articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
+//                    Log.d("ARTICLE RESULTS", articleJsonResults.toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     @Override
