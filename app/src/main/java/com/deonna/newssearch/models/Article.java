@@ -5,7 +5,6 @@ import com.deonna.newssearch.models.articlesearch.QueryResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Article {
 
@@ -21,11 +20,11 @@ public class Article {
         headline = doc.headline.main;
 
         if (!doc.multimedia.isEmpty()) {
-            thumbnail = String.format(Locale.US, URL_PREFIX, doc.multimedia.get(0).url);
+            thumbnail = "http://www.nytimes.com/" + doc.multimedia.get(0).url;//String.format(Locale.US, URL_PREFIX, doc.multimedia.get(0).url);
         }
     }
 
-    public static List<Article> addAll(QueryResponse queryResponse)  {
+    public static List<Article> fromQueryResponse(QueryResponse queryResponse)  {
 
         List<Article> articles = new ArrayList<>();
 

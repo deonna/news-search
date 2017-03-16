@@ -1,6 +1,5 @@
 package com.deonna.newssearch.activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
@@ -28,18 +23,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 
 public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
-
-
-//    @BindView(R.id.etQuery) EditText etQuery;
-//    @BindView(R.id.btnSearch) Button btnSearch;
-//    @BindView(R.id.gvResults) GridView gvResults;
+    private static final int NUM_COLUMNS = 2;
+    private static final String QUERY_HINT = "Enter a search query...";
 
     @BindView(R.id.tbArticles) Toolbar tbArticles;
     @BindView(R.id.rvArticles) RecyclerView rvArticles;
@@ -62,11 +53,12 @@ public class SearchActivity extends AppCompatActivity {
         articlesAdapter = new ArticlesAdapter(this, articles);
 
         rvArticles.setAdapter(articlesAdapter);
-//        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(this));
+        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
+                .VERTICAL));
+        //rvArticles.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void searchArticleByQuery(String query) {
-
 
         NewYorkTimesClient client = new NewYorkTimesClient();
 
@@ -76,10 +68,18 @@ public class SearchActivity extends AppCompatActivity {
                 new Callback<QueryResponse>() {
                     @Override
                     public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
-                        int statusCode = response.code();
+
                         QueryResponse queryResponse = response.body();
 
-                        Article.addAll(queryResponse);
+                        articles.addAll(Article.fromQueryResponse(queryResponse));
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                articlesAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
 
                     @Override
@@ -101,7 +101,7 @@ public class SearchActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint("Enter search query...");
+        searchView.setQueryHint(QUERY_HINT);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

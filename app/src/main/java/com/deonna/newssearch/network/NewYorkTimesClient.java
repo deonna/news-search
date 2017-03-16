@@ -20,6 +20,7 @@ public class NewYorkTimesClient {
 
     private static final String BASE_URL = "https://api.nytimes.com/svc/search/v2/";
     private static final String API_KEY = "d97d63c8ff3d421e9ce6b451e9332a06";
+    private static final String KEY_API = "api-key";
 
     private OkHttpClient client;
     private Retrofit retrofit;
@@ -57,7 +58,7 @@ public class NewYorkTimesClient {
 
                 HttpUrl url = originalUrl
                         .newBuilder()
-                        .addQueryParameter("api-key", API_KEY)
+                        .addQueryParameter(KEY_API, API_KEY)
                         .build();
 
                 Request request = originalRequest
