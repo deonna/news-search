@@ -1,10 +1,16 @@
 package com.deonna.newssearch.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +18,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import com.deonna.newssearch.R;
+import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
@@ -29,30 +36,37 @@ public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
-    @BindView(R.id.etQuery) EditText etQuery;
-    @BindView(R.id.btnSearch) Button btnSearch;
-    @BindView(R.id.gvResults) GridView gvResults;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
+//    @BindView(R.id.etQuery) EditText etQuery;
+//    @BindView(R.id.btnSearch) Button btnSearch;
+//    @BindView(R.id.gvResults) GridView gvResults;
+
+    @BindView(R.id.tbArticles) Toolbar tbArticles;
+    @BindView(R.id.rvArticles) RecyclerView rvArticles;
 
     private List<Article> articles;
+    private ArticlesAdapter articlesAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
 
+        setSupportActionBar(tbArticles);
+
         articles = new ArrayList<>();
+        articlesAdapter = new ArticlesAdapter(this, articles);
+
+        rvArticles.setAdapter(articlesAdapter);
+//        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(this));
     }
 
-    @OnClick(R.id.btnSearch)
-    public void onArticleSearch(View view) {
+    public void searchArticleByQuery(String query) {
 
-        String query = etQuery.getText().toString();
 
         NewYorkTimesClient client = new NewYorkTimesClient();
 
@@ -80,8 +94,32 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint("Enter search query...");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                searchArticleByQuery(query);
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -92,7 +130,7 @@ public class SearchActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
