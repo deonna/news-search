@@ -3,6 +3,7 @@ package com.deonna.newssearch.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,13 +12,18 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import com.deonna.newssearch.R;
+import com.deonna.newssearch.models.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class SearchActivity extends AppCompatActivity {
+
+    private static final String TAG = SearchActivity.class.getSimpleName();
 
     @BindView(R.id.etQuery) EditText etQuery;
     @BindView(R.id.btnSearch) Button btnSearch;
@@ -40,25 +46,24 @@ public class SearchActivity extends AppCompatActivity {
         String query = etQuery.getText().toString();
 
         NewYorkTimesClient client = new NewYorkTimesClient();
-        client.getArticlesFromQuery(query);
-//        NewYorkTimesOldClient client = new NewYorkTimesOldClient();
-//
-//        client.getArticlesFromQuery(query, new JsonHttpResponseHandler() {
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                Log.d("DEBUG", response.toString());
-//
-//                JSONArray articleJsonResults;
-//
-//                try {
-//                    articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-//                    Log.d("ARTICLE RESULTS", articleJsonResults.toString());
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+
+        client.getArticlesFromQuery(
+                query,
+
+                new Callback<QueryResponse>() {
+                    @Override
+                    public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
+                        int statusCode = response.code();
+                        QueryResponse queryResponse = response.body();
+                    }
+
+                    @Override
+                    public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+                        Log.d(TAG, "Failed to complete GET request");
+                    }
+                }
+        );
     }
 
     @Override

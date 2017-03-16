@@ -1,7 +1,5 @@
 package com.deonna.newssearch.network;
 
-import android.util.Log;
-
 import com.deonna.newssearch.models.QueryResponse;
 
 import java.io.IOException;
@@ -18,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewYorkTimesClient {
 
-    private static final String TAG = NewYorkTimesOldClient.class.getSimpleName();
+    private static final String TAG = NewYorkTimesClient.class.getSimpleName();
 
     private static final String BASE_URL = "https://api.nytimes.com/svc/search/v2/";
     private static final String API_KEY = "d97d63c8ff3d421e9ce6b451e9332a06";
@@ -42,23 +40,11 @@ public class NewYorkTimesClient {
         service = retrofit.create(NewYorkTimesService.class);
     }
 
-    public void getArticlesFromQuery(String query) {
+    public void getArticlesFromQuery(String query, Callback<QueryResponse> callback) {
 
-        Call<QueryResponse> call = service.getArticlesFromQuery("android");
+        Call<QueryResponse> call = service.getArticlesFromQuery(query);
 
-        call.enqueue(new Callback<QueryResponse>() {
-            @Override
-            public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
-                int statusCode = response.code();
-                QueryResponse queryResponse = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-                Log.d(TAG, "Failed to complete GET request");
-            }
-        });
+        call.enqueue(callback);
     }
 
     public Interceptor getRequestInterceptor() {
