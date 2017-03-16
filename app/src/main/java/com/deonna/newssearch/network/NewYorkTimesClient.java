@@ -1,6 +1,6 @@
 package com.deonna.newssearch.network;
 
-import com.deonna.newssearch.models.QueryResponse;
+import com.deonna.newssearch.models.articlesearch.QueryResponse;
 
 import java.io.IOException;
 

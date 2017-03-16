@@ -12,8 +12,12 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import com.deonna.newssearch.R;
-import com.deonna.newssearch.models.QueryResponse;
+import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,15 +33,20 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.btnSearch) Button btnSearch;
     @BindView(R.id.gvResults) GridView gvResults;
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
+    private List<Article> articles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
+
+        articles = new ArrayList<>();
     }
 
     @OnClick(R.id.btnSearch)
@@ -55,6 +64,8 @@ public class SearchActivity extends AppCompatActivity {
                     public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
                         int statusCode = response.code();
                         QueryResponse queryResponse = response.body();
+
+                        Article.addAll(queryResponse);
                     }
 
                     @Override

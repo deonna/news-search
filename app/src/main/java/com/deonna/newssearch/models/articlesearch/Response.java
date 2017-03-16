@@ -1,4 +1,4 @@
-package com.deonna.newssearch.models;
+package com.deonna.newssearch.models.articlesearch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
