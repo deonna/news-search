@@ -5,4 +5,8 @@
     <string name="action_search">Search</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="arts">Arts</string>
+    <string name="fashion">Fashion</string>
+    <string name="sports">Sports</string>
+    <string name="begin_date">Begin Date</string>
 </resources>
