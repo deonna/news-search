@@ -8,12 +8,17 @@ import retrofit2.http.Query;
 
 public interface NewYorkTimesService {
 
-    public static final String KEY_QUERY = "q";
-    public static final String KEY_BEGIN_DATE = "begin_date";
-    public static final String KEY_END_DATE = "end_date";
+    String KEY_QUERY = "q";
+    String KEY_PAGE = "page";
+    String KEY_BEGIN_DATE = "begin_date";
+    String KEY_END_DATE = "end_date";
 
     @GET("articlesearch.json")
     Call<QueryResponse> getArticlesFromQuery(@Query(KEY_QUERY) String query);
+
+    @GET("articlesearch.json")
+    Call<QueryResponse> getArticlesByPage(@Query(KEY_PAGE) String page, @Query(KEY_QUERY) String
+            query);
 
     @GET("articlesearch.json")
     Call<QueryResponse> getArticlesFromQueryBetweenDates(

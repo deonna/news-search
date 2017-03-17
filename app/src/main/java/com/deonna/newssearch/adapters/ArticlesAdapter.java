@@ -53,6 +53,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Article article = articles.get(position);
         ((ArticlesViewHolder) holder).setArticle(article);
 
+        (((ArticlesViewHolder) holder).ivThumbnail).setImageResource(0);
         Picasso
                 .with(context)
                 .load(article.thumbnail)
@@ -61,9 +62,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .into(((ArticlesViewHolder) holder).ivThumbnail);
 
 
-        ((ArticlesViewHolder) holder).tvTitle.setText(article .headline);
-        ((ArticlesViewHolder) holder).tvSection.setText(article .section);
-        ((ArticlesViewHolder) holder).tvSnippet.setText(article .snippet);
+        ((ArticlesViewHolder) holder).tvTitle.setText(article.headline);
+        ((ArticlesViewHolder) holder).tvSection.setText(article.section);
+        ((ArticlesViewHolder) holder).tvSnippet.setText(article.snippet);
     }
 
     @Override

@@ -48,6 +48,13 @@ public class NewYorkTimesClient {
         call.enqueue(callback);
     }
 
+    public void getArticlesByPage(String page, String query, Callback<QueryResponse> callback) {
+
+        Call<QueryResponse> call = service.getArticlesByPage(page, query);
+
+        call.enqueue(callback);
+    }
+
     public Interceptor getRequestInterceptor() {
 
         return new Interceptor() {

@@ -21,6 +21,7 @@ import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
+import com.deonna.newssearch.utilities.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -47,6 +49,12 @@ public class SearchActivity extends AppCompatActivity {
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
+    private NewYorkTimesClient client;
+
+    private String currentQuery;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,11 +68,54 @@ public class SearchActivity extends AppCompatActivity {
         articles = new ArrayList<>();
         articlesAdapter = new ArticlesAdapter(this, articles);
 
-        rvArticles.setAdapter(articlesAdapter);
-        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
-                .VERTICAL));
+        client = new NewYorkTimesClient();
 
-        //dlOptions.openDrawer(GravityCompat.START);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
+                .VERTICAL);
+
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        rvArticles.setAdapter(articlesAdapter);
+        rvArticles.setLayoutManager(layoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
+
+                String nextPage = Integer.valueOf(page).toString();
+                client.getArticlesByPage(nextPage, currentQuery, new Callback<QueryResponse>() {
+                    @Override
+                    public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                        final int oldCount = articlesAdapter.getItemCount();
+
+                        QueryResponse queryResponse = response.body();
+                        List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
+
+                        articles.addAll(moreArticles);
+
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                articlesAdapter.notifyItemRangeInserted(oldCount, articles.size()
+                                        - 1);
+                                scrollListener.resetState();
+                            }
+                        });
+
+                        articlesAdapter.notifyItemRangeInserted(oldCount, articles.size());
+                    }
+
+                    @Override
+                    public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+
+        };
+
+        rvArticles.addOnScrollListener(scrollListener);
 
         drawerToggle = setupDrawerToggle();
         dlOptions.addDrawerListener(drawerToggle);
@@ -84,9 +135,11 @@ public class SearchActivity extends AppCompatActivity {
 
     public void searchArticleByQuery(String query) {
 
-        NewYorkTimesClient client = new NewYorkTimesClient();
+        articles.clear();
+        articlesAdapter.notifyDataSetChanged();
+        scrollListener.resetState();
 
-        client.getArticlesFromQuery(
+        client.getArticlesByPage("0",
                 query,
 
                 new Callback<QueryResponse>() {
@@ -95,6 +148,7 @@ public class SearchActivity extends AppCompatActivity {
 
                         QueryResponse queryResponse = response.body();
 
+                        articles.clear();
                         articles.addAll(Article.fromQueryResponse(queryResponse));
 
                         runOnUiThread(new Runnable() {
@@ -121,7 +175,6 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
 
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -130,6 +183,8 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
+                currentQuery = query;
 
                 searchArticleByQuery(query);
                 searchView.clearFocus();
