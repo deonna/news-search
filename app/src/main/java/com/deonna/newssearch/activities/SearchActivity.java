@@ -47,7 +47,6 @@ public class SearchActivity extends AppCompatActivity {
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

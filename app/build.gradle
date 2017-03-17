@@ -25,7 +25,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.google.code.gson:gson:2.7'
+    //    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    //    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.android.support:appcompat-v7:25.2.0'
@@ -33,20 +36,17 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support:design:25.2.0'
-    compile "com.android.support:recyclerview-v7:25.2.0"
+    compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:cardview-v7:25.2.0'
-    compile "com.android.support:transition:25.2.0"
-    provided 'org.glassfish:javax.annotation:10.0-b28'
-//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.google.code.gson:gson:2.8.0'
-//    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'com.android.support:transition:25.2.0'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
     compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
-//    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'jp.wasabeef:picasso-transformations:2.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 }
