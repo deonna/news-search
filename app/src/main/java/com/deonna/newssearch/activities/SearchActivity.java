@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
@@ -52,6 +53,7 @@ public class SearchActivity extends AppCompatActivity {
     private NewYorkTimesClient client;
 
     private String currentQuery;
+    private int currentPage = 0;
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -65,6 +67,12 @@ public class SearchActivity extends AppCompatActivity {
 
         setSupportActionBar(tbArticles);
 
+        initializeArticleList();
+        initializeSidebar();
+    }
+
+    private void initializeArticleList() {
+
         articles = new ArrayList<>();
         articlesAdapter = new ArticlesAdapter(this, articles);
 
@@ -73,52 +81,26 @@ public class SearchActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
                 .VERTICAL);
 
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         rvArticles.setAdapter(articlesAdapter);
         rvArticles.setLayoutManager(layoutManager);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
-
-                String nextPage = Integer.valueOf(page).toString();
-                client.getArticlesByPage(nextPage, currentQuery, new Callback<QueryResponse>() {
-                    @Override
-                    public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
-
-                        final int oldCount = articlesAdapter.getItemCount();
-
-                        QueryResponse queryResponse = response.body();
-                        List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
-
-                        articles.addAll(moreArticles);
-
-                        view.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                articlesAdapter.notifyItemRangeInserted(oldCount, articles.size()
-                                        - 1);
-                                scrollListener.resetState();
-                            }
-                        });
-
-                        articlesAdapter.notifyItemRangeInserted(oldCount, articles.size());
-                    }
-
-                    @Override
-                    public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-                    }
-                });
-            }
-
-        };
+        scrollListener = initializeEndlessScrollListener(layoutManager);
 
         rvArticles.addOnScrollListener(scrollListener);
+    }
+
+    private void initializeSidebar() {
 
         drawerToggle = setupDrawerToggle();
         dlOptions.addDrawerListener(drawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onPostCreate(savedInstanceState);
+
+        drawerToggle.syncState();
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
@@ -126,18 +108,61 @@ public class SearchActivity extends AppCompatActivity {
         return new ActionBarDrawerToggle(this, dlOptions, tbArticles, R.string.drawer_open,  R.string.drawer_close);
     }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
 
-        drawerToggle.syncState();
+        return new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
+
+                loadEndlessScrollArticles(currentPage);
+            }
+        };
     }
 
-    public void searchArticleByQuery(String query) {
+    private void loadEndlessScrollArticles(int page) {
 
-        articles.clear();
-        articlesAdapter.notifyDataSetChanged();
+        client.getArticlesByPage(Integer.valueOf(page).toString(), currentQuery, new Callback<QueryResponse>() {
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                if (response.isSuccessful()) {
+
+                    QueryResponse queryResponse = response.body();
+                    List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
+
+                    articles.addAll(moreArticles);
+                    notifyArticlesChanged(moreArticles.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+            }
+        });
+
+        currentPage = page + 1;
         scrollListener.resetState();
+    }
+
+    private void notifyArticlesChanged(int newArraySize) {
+
+        int oldCount = articlesAdapter.getItemCount();
+        articlesAdapter.notifyItemRangeInserted(oldCount, newArraySize);
+
+        articlesAdapter.notifyDataSetChanged();
+    }
+
+    private void resetArticleState() {
+
+        currentPage = 0;
+        scrollListener.resetState();
+        articles.clear();
+    }
+
+    public void loadArticleByQuery(String query) {
+
+        resetArticleState();
 
         client.getArticlesByPage("0",
                 query,
@@ -148,7 +173,6 @@ public class SearchActivity extends AppCompatActivity {
 
                         QueryResponse queryResponse = response.body();
 
-                        articles.clear();
                         articles.addAll(Article.fromQueryResponse(queryResponse));
 
                         runOnUiThread(new Runnable() {
@@ -186,7 +210,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 currentQuery = query;
 
-                searchArticleByQuery(query);
+                loadArticleByQuery(query);
                 searchView.clearFocus();
 
                 return true;

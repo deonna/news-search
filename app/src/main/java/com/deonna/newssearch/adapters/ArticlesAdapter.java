@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ArticleActivity;
 import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.models.articlesearch.Doc;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
