@@ -19,10 +19,12 @@ import android.widget.Toast;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
+import com.deonna.newssearch.listeners.ArticleQueryListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
 import com.deonna.newssearch.utilities.EndlessRecyclerViewScrollListener;
+import com.deonna.newssearch.utilities.EndlessScrollHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +52,8 @@ public class SearchActivity extends AppCompatActivity {
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
-    private NewYorkTimesClient client;
-
-    private String currentQuery;
-    private int currentPage = 0;
-
-    private EndlessRecyclerViewScrollListener scrollListener;
+    private EndlessScrollHandler endlessScrollHandler;
+    private ArticleQueryListener articleQueryListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,17 +74,14 @@ public class SearchActivity extends AppCompatActivity {
         articles = new ArrayList<>();
         articlesAdapter = new ArticlesAdapter(this, articles);
 
-        client = new NewYorkTimesClient();
-
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
                 .VERTICAL);
 
         rvArticles.setAdapter(articlesAdapter);
         rvArticles.setLayoutManager(layoutManager);
 
-        scrollListener = initializeEndlessScrollListener(layoutManager);
-
-        rvArticles.addOnScrollListener(scrollListener);
+        endlessScrollHandler = new EndlessScrollHandler(articles, articlesAdapter, layoutManager);
+        rvArticles.addOnScrollListener(endlessScrollHandler.scrollListener);
     }
 
     private void initializeSidebar() {
@@ -108,91 +103,6 @@ public class SearchActivity extends AppCompatActivity {
         return new ActionBarDrawerToggle(this, dlOptions, tbArticles, R.string.drawer_open,  R.string.drawer_close);
     }
 
-    private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
-
-        return new EndlessRecyclerViewScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
-
-                loadEndlessScrollArticles(currentPage);
-            }
-        };
-    }
-
-    private void loadEndlessScrollArticles(int page) {
-
-        client.getArticlesByPage(Integer.valueOf(page).toString(), currentQuery, new Callback<QueryResponse>() {
-            @Override
-            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
-
-                if (response.isSuccessful()) {
-
-                    QueryResponse queryResponse = response.body();
-                    List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
-
-                    articles.addAll(moreArticles);
-                    notifyArticlesChanged(moreArticles.size());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-            }
-        });
-
-        currentPage = page + 1;
-        scrollListener.resetState();
-    }
-
-    private void notifyArticlesChanged(int newArraySize) {
-
-        int oldCount = articlesAdapter.getItemCount();
-        articlesAdapter.notifyItemRangeInserted(oldCount, newArraySize);
-
-        articlesAdapter.notifyDataSetChanged();
-    }
-
-    private void resetArticleState() {
-
-        currentPage = 0;
-        scrollListener.resetState();
-        articles.clear();
-    }
-
-    public void loadArticleByQuery(String query) {
-
-        resetArticleState();
-
-        client.getArticlesByPage("0",
-                query,
-
-                new Callback<QueryResponse>() {
-                    @Override
-                    public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
-
-                        QueryResponse queryResponse = response.body();
-
-                        articles.addAll(Article.fromQueryResponse(queryResponse));
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                articlesAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-                        Log.d(TAG, "Failed to complete GET request");
-                    }
-                }
-        );
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -204,23 +114,7 @@ public class SearchActivity extends AppCompatActivity {
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(QUERY_HINT);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                currentQuery = query;
-
-                loadArticleByQuery(query);
-                searchView.clearFocus();
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+        articleQueryListener = new ArticleQueryListener(searchView, endlessScrollHandler);
 
         return super.onCreateOptionsMenu(menu);
     }
