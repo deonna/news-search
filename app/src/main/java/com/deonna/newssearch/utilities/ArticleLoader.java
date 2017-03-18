@@ -22,7 +22,7 @@ public class ArticleLoader {
     public static final String KEY_NEWEST = "newest";
     public static final String KEY_OLDEST = "oldest";
 
-    public String currentQuery;
+    public String currentQuery = "";
     public EndlessRecyclerViewScrollListener scrollListener;
 
     private int currentPage = 0;
@@ -165,18 +165,37 @@ public class ArticleLoader {
         return articles;
     }
 
+    public void loadArticles(
+            String query,
+            String sortOrder,
+            String beginDate,
+            String newsDeskFilter,
+            String page) {
 
-    private void sortArticles(int filterState) {
+        resetArticleState();
 
-        switch (filterState) {
-            case FilterPositions.NEWEST_FIRST:
-                loadArticlesNewestToOldest();
-                break;
-            case FilterPositions.OLDEST_FIRST:
-                loadArticlesOldestToNewest();
-                break;
-            default:
-                break;
-        }
+        client.getArticles(
+                query,
+                sortOrder,
+                beginDate,
+                newsDeskFilter,
+                page,
+                new Callback<QueryResponse>() {
+                    @Override
+                    public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                        QueryResponse queryResponse = response.body();
+
+                        articles.addAll(Article.fromQueryResponse(queryResponse));
+
+                        articlesAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+                    }
+                }
+        );
     }
 }

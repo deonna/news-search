@@ -83,7 +83,7 @@ public class FilterFragment extends DialogFragment {
 
         ArticleFilterListener listener = (ArticleFilterListener) getActivity();
 
-        String beginDate = getFormattedDate(dpBeginDate);
+        String beginDate = getFormattedDate(dpBeginDate); //TODO: give option to make begin date null (have no begin date)
 
         Map<String, Boolean> topics = new HashMap<>();
 

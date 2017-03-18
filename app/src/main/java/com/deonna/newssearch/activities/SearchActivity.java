@@ -85,6 +85,37 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
     @Override
     public void onApplyFilters(String beginDate, String sortOrderParam, Map<String, Boolean> topics) {
         // construct query with all these params
+
+
+        String query = articleLoader.currentQuery.isEmpty() ? null : articleLoader.currentQuery;
+        String sortOrder = sortOrderParam.isEmpty() ? null : sortOrderParam;
+        String newsDeskFilter = null; //Format: fq=news_desk:("Education"%20"Health")
+        String page = null;
+
+        for(Map.Entry<String, Boolean> entry : topics.entrySet()) {
+
+            String topic = entry.getKey();
+            Boolean isSelected = entry.getValue();
+
+            if (isSelected) {
+
+                if (newsDeskFilter == null) {
+                    newsDeskFilter = String.format("news_desk:(\"%s\"", topic);
+                } else {
+                    newsDeskFilter = String.format("%s%%20\"%s\"", newsDeskFilter, topic);
+                }
+            }
+        }
+
+        newsDeskFilter = String.format("%s)", newsDeskFilter);
+
+        articleLoader.loadArticles(
+                query,
+                sortOrder,
+                beginDate,
+                newsDeskFilter,
+                page
+        );
     }
 
 //    private ActionBarDrawerToggle drawerToggle;

@@ -13,6 +13,7 @@ public interface NewYorkTimesService {
     String KEY_BEGIN_DATE = "begin_date";
     String KEY_END_DATE = "end_date";
     String KEY_SORT = "sort";
+    String KEY_FQ = "fq";
 
     @GET("articlesearch.json")
     Call<QueryResponse> getArticlesFromQuery(@Query(KEY_QUERY) String query);
@@ -38,5 +39,20 @@ public interface NewYorkTimesService {
     Call<QueryResponse> getArticlesSortedNewestToOldest(
             @Query(KEY_QUERY) String query,
             @Query(KEY_SORT) String sortOrder
+    );
+
+    @GET("articlesearch.json")
+    Call<QueryResponse> getArticlesWithBeginDateAndQuery(
+            @Query(KEY_QUERY) String query,
+            @Query(KEY_SORT) String sortOrder
+    );
+
+    @GET("articlesearch.json")
+    Call<QueryResponse> getArticles(
+      @Query(KEY_QUERY) String query,
+      @Query(KEY_SORT) String sortOrder,
+      @Query(KEY_BEGIN_DATE) String beginDate,
+      @Query(KEY_FQ) String newsDeskFilter,
+      @Query(KEY_PAGE) String page
     );
 }

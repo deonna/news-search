@@ -94,4 +94,18 @@ public class NewYorkTimesClient {
 
         call.enqueue(callback);
     }
+
+    public void getArticles(
+            String query,
+            String sortOrder,
+            String beginDate,
+            String newsDeskFilter,
+            String page,
+            Callback<QueryResponse> callback
+    ) {
+
+        Call<QueryResponse> call = service.getArticles(query, sortOrder, beginDate, newsDeskFilter, page);
+
+        call.enqueue(callback);
+    }
 }
