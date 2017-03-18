@@ -14,18 +14,52 @@
         android:fitsSystemWindows="true"
         tools:context="com.deonna.newssearch.activities.SearchActivity">
 
-        <include
+        <!--<include-->
+            <!--android:id="@+id/tbArticles"-->
+            <!--layout="@layout/toolbar_search"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--/>-->
+
+
+        <ImageView
+            android:id="@+id/ivFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingLeft="12dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_filter"/>
+
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tbArticles"
-            layout="@layout/toolbar_search"
-            android:layout_height="wrap_content"
+            app:theme="@style/ToolbarBackArrow"
+            android:minHeight="?attr/actionBarSize"
             android:layout_width="match_parent"
-            />
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:layout_toRightOf="@+id/ivFilter"
+            android:layout_toEndOf="@+id/ivFilter"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@android:color/white">
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/svArticle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tbArticles"
+            android:queryHint="Enter search query..."/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvArticles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tbArticles"/>
+            android:layout_below="@+id/svArticle"/>
 
     </RelativeLayout>
 
