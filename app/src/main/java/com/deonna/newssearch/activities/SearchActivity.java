@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
@@ -106,12 +108,12 @@ public class SearchActivity extends AppCompatActivity {
 
         switch(item.getItemId()) {
 
-//            case R.id.ivBeginDate:
-//                ImageView ivBeginDate = view.findViewById(R.id.ivBeginDate);
-//                break;
-//            case R.id.spSortOrder:
-//                Spinner spSortOrder = (Spinner) view;
-//                break;
+            case R.id.vwBeginDate:
+                ImageView ivBeginDate = ButterKnife.findById(view, R.id.ivBeginDate);
+                break;
+            case R.id.vwSortOrder:
+                Spinner spSortOrder = ButterKnife.findById(view, R.id.spSortOrder);
+                break;
             case R.id.vwArts:
                 CheckBox cbArts = ButterKnife.findById(view, R.id.cbTopic);
                 cbArts.setChecked(!cbArts.isChecked());
@@ -126,7 +128,6 @@ public class SearchActivity extends AppCompatActivity {
                 break;
 
         }
-
     }
 
     @Override

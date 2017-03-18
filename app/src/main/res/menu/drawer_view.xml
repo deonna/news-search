@@ -5,15 +5,15 @@
 
     <group android:checkableBehavior="single">
 
-        <!--<item-->
-            <!--android:id="@+id/ivBeginDate"-->
-            <!--app:actionLayout="@layout/widget_begin_date"-->
-            <!--android:title="@string/begin_date" />-->
+        <item
+            android:id="@+id/vwBeginDate"
+            app:actionLayout="@layout/widget_begin_date"
+            android:title="@string/begin_date" />
 
-        <!--<item-->
-            <!--android:id="@+id/spSortOrder"-->
-            <!--android:title="@string/sort"-->
-            <!--app:actionLayout="@layout/widget_switch" />-->
+        <item
+            android:id="@+id/vwSortOrder"
+            android:title="@string/sort"
+            app:actionLayout="@layout/widget_switch" />
 
         <item
             android:id="@+id/vwArts"
