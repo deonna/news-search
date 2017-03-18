@@ -12,7 +12,7 @@
 
         <item
             android:id="@+id/frSortOrder"
-            android:title="Sort Oldest First"
+            android:title="@string/sort"
             app:actionLayout="@layout/widget_switch" />
 
         <item
@@ -27,6 +27,7 @@
             android:id="@+id/frSports"
             app:actionLayout="@layout/widget_check"
             android:title="@string/sports" />
+
     </group>
 
 </menu>

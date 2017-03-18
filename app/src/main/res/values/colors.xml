@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCardView">#E6E6E6</color>
     <color name="colorSectionBackground">#00B0BE</color>
+    <color name="colorButtonBackground">#40ffffff</color>
 </resources>

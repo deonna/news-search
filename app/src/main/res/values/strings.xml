@@ -9,4 +9,7 @@
     <string name="fashion">Fashion</string>
     <string name="sports">Sports</string>
     <string name="begin_date">Begin Date</string>
+    <string name="newest_first">Newest First</string>
+    <string name="sort">Sort</string>
+    <string name="apply">Apply</string>
 </resources>
