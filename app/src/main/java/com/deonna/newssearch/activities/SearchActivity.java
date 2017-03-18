@@ -1,43 +1,37 @@
 package com.deonna.newssearch.activities;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Spinner;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.fragments.FilterFragment;
+import com.deonna.newssearch.listeners.ArticleFilterListener;
 import com.deonna.newssearch.listeners.ArticleQueryListener;
 import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.network.NewYorkTimesClient;
+import com.deonna.newssearch.utilities.ArticleLoader;
 import com.deonna.newssearch.utilities.EndlessScrollHandler;
+import com.deonna.newssearch.utilities.FilterPositions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.functions.Func2;
+import rx.subscriptions.CompositeSubscription;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements ArticleFilterListener {
 
-    private static final String TAG = SearchActivity.class.getSimpleName();
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
 
@@ -47,16 +41,11 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.svArticle) SearchView svArticle;
 
     @BindView(R.id.ivFilter) ImageView ivFilter;
-//    @BindView(R.id.dlOptions) DrawerLayout dlOptions;
-//    @BindView(R.id.nvDrawer) NavigationView nvDrawer;
-
-    private ActionBarDrawerToggle drawerToggle;
 
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
     private EndlessScrollHandler endlessScrollHandler;
-    private ArticleQueryListener articleQueryListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +60,7 @@ public class SearchActivity extends AppCompatActivity {
         initializeArticleList();
 
         svArticle.setQueryHint(QUERY_HINT);
-        articleQueryListener = new ArticleQueryListener(svArticle, endlessScrollHandler);
+        ArticleQueryListener articleQueryListener = new ArticleQueryListener(svArticle, endlessScrollHandler);
 //        initializeSidebar();
     }
 
@@ -97,6 +86,16 @@ public class SearchActivity extends AppCompatActivity {
         FilterFragment filterFragment = FilterFragment.newInstance("Set Filters");
         filterFragment.show(fm, "fragment_filter");
     }
+
+    @Override
+    public void onApplyFilters(String beginDate, String sortOrderParam, Map<String, Boolean> topics) {
+        // construct query with all these params
+    }
+
+//    private ActionBarDrawerToggle drawerToggle;
+
+//    @BindView(R.id.dlOptions) DrawerLayout dlOptions;
+//    @BindView(R.id.nvDrawer) NavigationView nvDrawer;
 
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {

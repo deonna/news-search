@@ -12,6 +12,7 @@ public interface NewYorkTimesService {
     String KEY_PAGE = "page";
     String KEY_BEGIN_DATE = "begin_date";
     String KEY_END_DATE = "end_date";
+    String KEY_SORT = "sort";
 
     @GET("articlesearch.json")
     Call<QueryResponse> getArticlesFromQuery(@Query(KEY_QUERY) String query);
@@ -25,5 +26,17 @@ public interface NewYorkTimesService {
             @Query(KEY_QUERY) String query,
             @Query(KEY_BEGIN_DATE) String startDate,
             @Query(KEY_END_DATE) String endDate
+    );
+
+    @GET("articlesearch.json")
+    Call<QueryResponse> getArticlesSortedOldestToNewest(
+            @Query(KEY_QUERY) String query,
+            @Query(KEY_SORT) String sortOrder
+    );
+
+    @GET("articlesearch.json")
+    Call<QueryResponse> getArticlesSortedNewestToOldest(
+            @Query(KEY_QUERY) String query,
+            @Query(KEY_SORT) String sortOrder
     );
 }

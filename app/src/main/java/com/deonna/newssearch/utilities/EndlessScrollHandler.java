@@ -20,13 +20,16 @@ public class EndlessScrollHandler {
     private static final String TAG = EndlessScrollHandler.class.getSimpleName();
 
     public String currentQuery;
-    public EndlessRecyclerViewScrollListener scrollListener;
+    public ArticleLoader scrollListener;
 
     private int currentPage = 0;
 
     private NewYorkTimesClient client;
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
+
+    private int filter;
+    private NewYorkTimesClient client;
 
     public EndlessScrollHandler(List<Article> articles, ArticlesAdapter articlesAdapter, StaggeredGridLayoutManager layoutManager) {
 
@@ -38,9 +41,9 @@ public class EndlessScrollHandler {
         scrollListener = initializeEndlessScrollListener(layoutManager);
     }
 
-    private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
+    private ArticleLoader initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
 
-        return new EndlessRecyclerViewScrollListener(layoutManager) {
+        return new ArticleLoader(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
 
@@ -114,5 +117,67 @@ public class EndlessScrollHandler {
                 }
             }
         );
+    }
+
+    public List<Article> loadArticlesNewestToOldest() {
+
+        resetArticleState();
+
+        client.getArticlesSortedNewestToOldest(currentQuery, new Callback<QueryResponse>() {
+
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                QueryResponse queryResponse = response.body();
+
+                articles.addAll(Article.fromQueryResponse(queryResponse));
+            }
+
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+            }
+        };
+
+
+        return articles;
+    }
+
+    public List<Article> loadArticlesOldestToNewest() {
+
+        resetArticleState();
+
+        client.getArticlesSortedOldestToNewest(currentQuery, new Callback<QueryResponse>() {
+
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                QueryResponse queryResponse = response.body();
+
+                articles.addAll(Article.fromQueryResponse(queryResponse));
+            }
+
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+            }
+        };
+
+        return articles;
+    }
+
+
+    private void sortArticles(int filterState) {
+
+        switch (filterState) {
+            case FilterPositions.NEWEST_FIRST:
+                loadArticlesNewestToOldest();
+                break;
+            case FilterPositions.OLDEST_FIRST:
+                loadArticlesOldestToNewest();
+                break;
+            default:
+                break;
+        }
     }
 }
