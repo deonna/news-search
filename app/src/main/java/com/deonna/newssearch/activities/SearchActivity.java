@@ -1,6 +1,7 @@
 package com.deonna.newssearch.activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
@@ -11,19 +12,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.listeners.ArticleQueryListener;
 import com.deonna.newssearch.models.Article;
-import com.deonna.newssearch.models.articlesearch.QueryResponse;
-import com.deonna.newssearch.network.NewYorkTimesClient;
-import com.deonna.newssearch.utilities.EndlessRecyclerViewScrollListener;
 import com.deonna.newssearch.utilities.EndlessScrollHandler;
 
 import java.util.ArrayList;
@@ -31,9 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -88,6 +83,50 @@ public class SearchActivity extends AppCompatActivity {
 
         drawerToggle = setupDrawerToggle();
         dlOptions.addDrawerListener(drawerToggle);
+
+        initializeDrawerContent();
+    }
+
+    private void initializeDrawerContent() {
+
+        nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+           @Override
+           public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+               selectDrawerItem(item);
+               return true;
+           }
+
+        });
+    }
+
+    private void selectDrawerItem(MenuItem item) {
+
+        View view = item.getActionView();
+
+
+        switch(item.getItemId()) {
+
+//            case R.id.ivBeginDate:
+//                ImageView ivBeginDate = view.findViewById(R.id.ivBeginDate);
+//                break;
+//            case R.id.spSortOrder:
+//                Spinner spSortOrder = (Spinner) view;
+//                break;
+            case R.id.vwArts:
+                CheckBox cbArts = ButterKnife.findById(view, R.id.cbTopic);
+                cbArts.setChecked(!cbArts.isChecked());
+                break;
+            case R.id.vwFashion:
+                CheckBox cbFashion = ButterKnife.findById(view, R.id.cbTopic);
+                cbFashion.setChecked(!cbFashion.isChecked());
+                break;
+            case R.id.vwSports:
+                CheckBox cbSports = ButterKnife.findById(view, R.id.cbTopic);
+                cbSports.setChecked(!cbSports.isChecked());
+                break;
+
+        }
+
     }
 
     @Override

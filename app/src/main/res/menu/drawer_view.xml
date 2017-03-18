@@ -5,26 +5,26 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/frBeginDate"
-            app:actionLayout="@layout/widget_begin_date"
-            android:title="@string/begin_date" />
+        <!--<item-->
+            <!--android:id="@+id/ivBeginDate"-->
+            <!--app:actionLayout="@layout/widget_begin_date"-->
+            <!--android:title="@string/begin_date" />-->
+
+        <!--<item-->
+            <!--android:id="@+id/spSortOrder"-->
+            <!--android:title="@string/sort"-->
+            <!--app:actionLayout="@layout/widget_switch" />-->
 
         <item
-            android:id="@+id/frSortOrder"
-            android:title="@string/sort"
-            app:actionLayout="@layout/widget_switch" />
-
-        <item
-            android:id="@+id/frArts"
+            android:id="@+id/vwArts"
             app:actionLayout="@layout/widget_check"
             android:title="@string/arts" />
         <item
-            android:id="@+id/frFashion"
+            android:id="@+id/vwFashion"
             app:actionLayout="@layout/widget_check"
             android:title="@string/fashion" />
         <item
-            android:id="@+id/frSports"
+            android:id="@+id/vwSports"
             app:actionLayout="@layout/widget_check"
             android:title="@string/sports" />
 
