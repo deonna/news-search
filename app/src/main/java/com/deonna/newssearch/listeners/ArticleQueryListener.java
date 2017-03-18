@@ -2,17 +2,17 @@ package com.deonna.newssearch.listeners;
 
 import android.support.v7.widget.SearchView;
 
-import com.deonna.newssearch.utilities.EndlessScrollHandler;
+import com.deonna.newssearch.utilities.ArticleLoader;
 
 public class ArticleQueryListener implements SearchView.OnQueryTextListener {
 
-    private EndlessScrollHandler endlessScrollHandler;
+    private ArticleLoader articleLoader;
     private SearchView searchView;
 
-    public ArticleQueryListener(SearchView searchView, EndlessScrollHandler endlessScrollHandler) {
+    public ArticleQueryListener(SearchView searchView, ArticleLoader articleLoader) {
 
         this.searchView = searchView;
-        this.endlessScrollHandler = endlessScrollHandler;
+        this.articleLoader = articleLoader;
 
         setArticleQueryListener();
     }
@@ -20,9 +20,9 @@ public class ArticleQueryListener implements SearchView.OnQueryTextListener {
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        endlessScrollHandler.currentQuery = query;
+        articleLoader.currentQuery = query;
 
-        endlessScrollHandler.loadArticleByQuery(query);
+        articleLoader.loadArticleByQuery(query);
         searchView.clearFocus();
 
         return true;

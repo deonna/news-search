@@ -1,105 +1,182 @@
 package com.deonna.newssearch.utilities;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
-public abstract class ArticleLoader extends RecyclerView.OnScrollListener {
-    // The minimum amount of items to have below your current scroll position
-    // before loading more.
-    private int visibleThreshold = 5;
-    // The current offset index of data you have loaded
+import com.deonna.newssearch.adapters.ArticlesAdapter;
+import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.models.articlesearch.QueryResponse;
+import com.deonna.newssearch.network.NewYorkTimesClient;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ArticleLoader {
+
+    private static final String TAG = ArticleLoader.class.getSimpleName();
+
+    public static final String KEY_NEWEST = "newest";
+    public static final String KEY_OLDEST = "oldest";
+
+    public String currentQuery;
+    public EndlessRecyclerViewScrollListener scrollListener;
+
     private int currentPage = 0;
-    // The total number of items in the dataset after the last load
-    private int previousTotalItemCount = 0;
-    // True if we are still waiting for the last set of data to load.
-    private boolean loading = true;
-    // Sets the starting page index
-    private int startingPageIndex = 0;
 
-    RecyclerView.LayoutManager layoutManager;
+    private NewYorkTimesClient client;
+    private List<Article> articles;
+    private ArticlesAdapter articlesAdapter;
 
-    public ArticleLoader(LinearLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
+    public ArticleLoader(List<Article> articles, ArticlesAdapter articlesAdapter, StaggeredGridLayoutManager layoutManager) {
+
+        client = new NewYorkTimesClient();
+
+        this.articles = articles;
+        this.articlesAdapter = articlesAdapter;
+
+        scrollListener = initializeEndlessScrollListener(layoutManager);
     }
 
-    public ArticleLoader(GridLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
-        visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
-    }
+    private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
 
-    public ArticleLoader(StaggeredGridLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
-        visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
-    }
+        return new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, final RecyclerView view) {
 
-    public int getLastVisibleItem(int[] lastVisibleItemPositions) {
-        int maxSize = 0;
-        for (int i = 0; i < lastVisibleItemPositions.length; i++) {
-            if (i == 0) {
-                maxSize = lastVisibleItemPositions[i];
+                loadEndlessScrollArticles(currentPage);
             }
-            else if (lastVisibleItemPositions[i] > maxSize) {
-                maxSize = lastVisibleItemPositions[i];
+        };
+    }
+
+    private void loadEndlessScrollArticles(int page) {
+
+        client.getArticlesByPage(Integer.valueOf(page).toString(), currentQuery, new Callback<QueryResponse>() {
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                if (response.isSuccessful()) {
+
+                    QueryResponse queryResponse = response.body();
+                    List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
+
+                    articles.addAll(moreArticles);
+                    notifyArticlesChanged(moreArticles.size());
+                }
             }
-        }
-        return maxSize;
-    }
 
-    // This happens many times a second during a scroll, so be wary of the code you place here.
-    // We are given a few useful parameters to help us work out if we need to load some more data,
-    // but first we check if we are waiting for the previous load to finish.
-    @Override
-    public void onScrolled(RecyclerView view, int dx, int dy) {
-        int lastVisibleItemPosition = 0;
-        int totalItemCount = layoutManager.getItemCount();
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
 
-        if (layoutManager instanceof StaggeredGridLayoutManager) {
-            int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
-            // get maximum element within the list
-            lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
-        } else if (layoutManager instanceof GridLayoutManager) {
-            lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
-        } else if (layoutManager instanceof LinearLayoutManager) {
-            lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-        }
-
-        // If the total item count is zero and the previous isn't, assume the
-        // list is invalidated and should be reset back to initial state
-        if (totalItemCount < previousTotalItemCount) {
-            this.currentPage = this.startingPageIndex;
-            this.previousTotalItemCount = totalItemCount;
-            if (totalItemCount == 0) {
-                this.loading = true;
             }
-        }
-        // If it’s still loading, we check to see if the dataset count has
-        // changed, if so we conclude it has finished loading and update the current page
-        // number and total item count.
-        if (loading && (totalItemCount > previousTotalItemCount)) {
-            loading = false;
-            previousTotalItemCount = totalItemCount;
-        }
+        });
 
-        // If it isn’t currently loading, we check to see if we have breached
-        // the visibleThreshold and need to reload more data.
-        // If we do need to reload some more data, we execute onLoadMore to fetch the data.
-        // threshold should reflect how many total columns there are too
-        if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            currentPage++;
-            onLoadMore(currentPage, totalItemCount, view);
-            loading = true;
-        }
+        currentPage = page + 1;
+        scrollListener.resetState();
     }
 
-    // Call this method whenever performing new searches
-    public void resetState() {
-        this.currentPage = this.startingPageIndex;
-        this.previousTotalItemCount = 0;
-        this.loading = true;
+    private void notifyArticlesChanged(int newArraySize) {
+
+        int oldCount = articlesAdapter.getItemCount();
+        articlesAdapter.notifyItemRangeInserted(oldCount, newArraySize);
+
+        articlesAdapter.notifyDataSetChanged();
     }
 
-    // Defines the process for actually loading more data based on page
-    public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
+    private void resetArticleState() {
+
+        currentPage = 0;
+        scrollListener.resetState();
+        articles.clear();
+    }
+
+    public void loadArticleByQuery(String query) {
+
+        resetArticleState();
+
+        client.getArticlesFromQuery(
+            query,
+            new Callback<QueryResponse>() {
+                @Override
+                public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
+
+                    QueryResponse queryResponse = response.body();
+
+                    articles.addAll(Article.fromQueryResponse(queryResponse));
+
+                    articlesAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+                    Log.d(TAG, "Failed to complete GET request");
+                }
+            }
+        );
+    }
+
+    public List<Article> loadArticlesNewestToOldest() {
+
+        resetArticleState();
+
+        client.getArticlesSortedNewestToOldest(currentQuery, new Callback<QueryResponse>() {
+
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                QueryResponse queryResponse = response.body();
+
+                articles.addAll(Article.fromQueryResponse(queryResponse));
+            }
+
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+            }
+        });
+
+        return articles;
+    }
+
+    public List<Article> loadArticlesOldestToNewest() {
+
+        resetArticleState();
+
+        client.getArticlesSortedOldestToNewest(currentQuery, new Callback<QueryResponse>() {
+
+            @Override
+            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+
+                QueryResponse queryResponse = response.body();
+
+                articles.addAll(Article.fromQueryResponse(queryResponse));
+            }
+
+            @Override
+            public void onFailure(Call<QueryResponse> call, Throwable t) {
+
+            }
+        });
+
+        return articles;
+    }
+
+
+    private void sortArticles(int filterState) {
+
+        switch (filterState) {
+            case FilterPositions.NEWEST_FIRST:
+                loadArticlesNewestToOldest();
+                break;
+            case FilterPositions.OLDEST_FIRST:
+                loadArticlesOldestToNewest();
+                break;
+            default:
+                break;
+        }
+    }
 }

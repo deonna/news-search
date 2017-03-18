@@ -15,10 +15,7 @@ import com.deonna.newssearch.fragments.FilterFragment;
 import com.deonna.newssearch.listeners.ArticleFilterListener;
 import com.deonna.newssearch.listeners.ArticleQueryListener;
 import com.deonna.newssearch.models.Article;
-import com.deonna.newssearch.network.NewYorkTimesClient;
 import com.deonna.newssearch.utilities.ArticleLoader;
-import com.deonna.newssearch.utilities.EndlessScrollHandler;
-import com.deonna.newssearch.utilities.FilterPositions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +24,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.functions.Func2;
-import rx.subscriptions.CompositeSubscription;
 
 public class SearchActivity extends AppCompatActivity implements ArticleFilterListener {
 
@@ -45,7 +40,7 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
-    private EndlessScrollHandler endlessScrollHandler;
+    private ArticleLoader articleLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,7 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
         initializeArticleList();
 
         svArticle.setQueryHint(QUERY_HINT);
-        ArticleQueryListener articleQueryListener = new ArticleQueryListener(svArticle, endlessScrollHandler);
+        ArticleQueryListener articleQueryListener = new ArticleQueryListener(svArticle, articleLoader);
 //        initializeSidebar();
     }
 
@@ -75,8 +70,8 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
         rvArticles.setAdapter(articlesAdapter);
         rvArticles.setLayoutManager(layoutManager);
 
-        endlessScrollHandler = new EndlessScrollHandler(articles, articlesAdapter, layoutManager);
-        rvArticles.addOnScrollListener(endlessScrollHandler.scrollListener);
+        articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager);
+        rvArticles.addOnScrollListener(articleLoader.scrollListener);
     }
 
     @OnClick(R.id.ivFilter)
@@ -130,7 +125,7 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 //        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 //        searchView.setQueryHint(QUERY_HINT);
 //
-//        articleQueryListener = new ArticleQueryListener(searchView, endlessScrollHandler);
+//        articleQueryListener = new ArticleQueryListener(searchView, articleLoader);
 //
 //        return super.onCreateOptionsMenu(menu);
 //    }
