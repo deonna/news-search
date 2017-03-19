@@ -1,8 +1,5 @@
 package com.deonna.newssearch.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.deonna.newssearch.models.articlesearch.Doc;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 
@@ -10,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Article implements Parcelable {
+public class Article {
 
     public static final String URL_PREFIX = "http://www.nytimes.com/%s";
 
@@ -36,27 +33,6 @@ public class Article implements Parcelable {
         }
     }
 
-    protected Article(Parcel in) {
-        url = in.readString();
-        thumbnail = in.readString();
-        headline = in.readString();
-        section = in.readString();
-        snippet = in.readString();
-        publicationDate = in.readString();
-    }
-
-    public static final Creator<Article> CREATOR = new Creator<Article>() {
-        @Override
-        public Article createFromParcel(Parcel in) {
-            return new Article(in);
-        }
-
-        @Override
-        public Article[] newArray(int size) {
-            return new Article[size];
-        }
-    };
-
     public static List<Article> fromQueryResponse(QueryResponse queryResponse)  {
 
         List<Article> articles = new ArrayList<>();
@@ -73,20 +49,5 @@ public class Article implements Parcelable {
         }
 
         return articles;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(url);
-        dest.writeString(thumbnail);
-        dest.writeString(headline);
-        dest.writeString(section);
-        dest.writeString(snippet);
-        dest.writeString(publicationDate);
     }
 }
