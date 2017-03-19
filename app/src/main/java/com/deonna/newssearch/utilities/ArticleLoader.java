@@ -141,11 +141,13 @@ public class ArticleLoader {
                     @Override
                     public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
 
-                        QueryResponse queryResponse = response.body();
+                        if (response.isSuccessful()) {
+                            QueryResponse queryResponse = response.body();
 
-                        articles.addAll(Article.fromQueryResponse(queryResponse));
+                            articles.addAll(Article.fromQueryResponse(queryResponse));
 
-                        articlesAdapter.notifyDataSetChanged();
+                            articlesAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override

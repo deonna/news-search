@@ -79,24 +79,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         Article article = articles.get(position);
 
+        ArticlesNoImageViewHolder articlesHolder = (ArticlesNoImageViewHolder) holder;
+        articlesHolder.setArticle(article);
+        articlesHolder.configure();
+
         switch(holder.getItemViewType()) {
 
             case ARTICLE_DEFAULT:
-                ArticlesViewHolder articlesViewHolder = (ArticlesViewHolder) holder;
-                articlesViewHolder.setArticle(article);
-                articlesViewHolder.configure();
-                loadImage(article, articlesViewHolder);
-                break;
-            case ARTICLE_NO_IMAGE:
-                ArticlesNoImageViewHolder noImageHolder = (ArticlesNoImageViewHolder) holder;
-                noImageHolder.setArticle(article);
-                noImageHolder.configure();
+                loadImage(article, (ArticlesViewHolder) articlesHolder);
                 break;
             default:
-                ArticlesViewHolder defaultHolder = (ArticlesViewHolder) holder;
-                defaultHolder.setArticle(article);
-                defaultHolder.configure();
-                loadImage(article, defaultHolder);
                 break;
         }
     }
@@ -119,48 +111,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return articles.size();
     }
 
-    public static class ArticlesViewHolder extends RecyclerView.ViewHolder {
+    public static class ArticlesViewHolder extends ArticlesNoImageViewHolder {
 
-        @BindView(R.id.cvArticle) CardView cvArticle;
         @BindView(R.id.ivThumbnail) ImageView ivThumbnail;
-        @BindView(R.id.tvPublicationDate) TextView tvPublicationDate;
-        @BindView(R.id.tvTitle) TextView tvTitle;
-        @BindView(R.id.tvSection) TextView tvSection;
-        @BindView(R.id.tvSnippet) TextView tvSnippet;
-
-        private Article article;
 
         public ArticlesViewHolder(View itemView) {
 
             super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            cvArticle.setOnClickListener((view) -> {
-                openArticle();
-            });
-        }
-
-        public void setArticle(Article article) {
-
-            this.article = article;
-        }
-
-        public void openArticle() {
-
-            Context context = cvArticle.getContext();
-
-            Intent intent = new Intent(context, ArticleActivity.class);
-            intent.putExtra(KEY_URL, article.url);
-
-            context.startActivity(intent);
-        }
-
-        public void configure() {
-
-            tvPublicationDate.setText(article.publicationDate);
-            tvTitle.setText(article.headline);
-            tvSection.setText(article.section);
-            tvSnippet.setText(article.snippet);
         }
     }
 
