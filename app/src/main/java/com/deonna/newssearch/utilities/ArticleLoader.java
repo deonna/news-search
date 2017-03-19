@@ -21,7 +21,6 @@ public class ArticleLoader {
     public static final String KEY_NEWEST = "newest";
     public static final String KEY_OLDEST = "oldest";
 
-    public String currentQuery = "";
     public EndlessRecyclerViewScrollListener scrollListener;
 
     private int currentPage = 0;
@@ -31,7 +30,7 @@ public class ArticleLoader {
     private ArticlesAdapter articlesAdapter;
 
     //Current filters
-    private String query = null;
+    public String query = null;
     private String sortOrder = null;
     private String beginDate = null;
     private String newsDeskFilter = null;
@@ -60,8 +59,12 @@ public class ArticleLoader {
 
     private void loadEndlessScrollArticles(int page) {
 
+       if (newsDeskFilter != null) {
+           query = null;
+       }
+
        client.getArticlesByPage(
-               currentQuery,
+               query,
                sortOrder,
                beginDate,
                newsDeskFilter,
@@ -106,9 +109,9 @@ public class ArticleLoader {
         articlesAdapter.notifyDataSetChanged();
     }
 
-    public void loadArticles(String query) {
+    public void loadArticles(String newQuery) {
 
-        loadArticles(query, sortOrder, beginDate, newsDeskFilter, page);
+        loadArticles(newQuery, sortOrder, beginDate, newsDeskFilter, page);
     }
 
     public void loadArticles(

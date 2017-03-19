@@ -86,19 +86,16 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
     public void onApplyFilters(String beginDate, String sortOrderParam, Map<String, Boolean> topics) {
         // construct query with all these params
 
-
-        String query = articleLoader.currentQuery.isEmpty() ? null : articleLoader.currentQuery;
         String sortOrder = sortOrderParam.isEmpty() ? null : sortOrderParam;
         String newsDeskFilter = makeNewsDeskQuery(topics);
         String page = null;
 
         if (newsDeskFilter != null) {
-            query = null;
             clearQuery();
         }
 
         articleLoader.loadArticles(
-                query,
+                articleLoader.query,
                 sortOrder,
                 beginDate,
                 newsDeskFilter,
@@ -108,7 +105,8 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
     private void clearQuery() {
 
-        svArticle.setQuery("", true);
+        articleLoader.query = null;
+        svArticle.setQuery(null, true);
     }
 
     private String makeNewsDeskQuery(Map<String, Boolean> topics) {

@@ -100,7 +100,9 @@ public class FilterFragment extends DialogFragment {
 
         String sortOrderParam;
 
-        if (sortOrder.toLowerCase() == getResources().getString(R.string.newest_first).toLowerCase()) {
+        final String NEWEST_FIRST = getResources().getString(R.string.newest_first).toLowerCase();
+
+        if (sortOrder.toLowerCase().equals(NEWEST_FIRST)) {
             sortOrderParam = ArticleLoader.KEY_NEWEST;
         } else {
             sortOrderParam = ArticleLoader.KEY_OLDEST;

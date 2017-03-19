@@ -20,8 +20,6 @@ public class ArticleQueryListener implements SearchView.OnQueryTextListener {
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        articleLoader.currentQuery = query;
-
         articleLoader.loadArticles(query);
         searchView.clearFocus();
 
