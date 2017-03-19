@@ -1,5 +1,6 @@
 package com.deonna.newssearch.network;
 
+import com.deonna.newssearch.BuildConfig;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ public class NewYorkTimesClient {
     private static final String TAG = NewYorkTimesClient.class.getSimpleName();
 
     private static final String BASE_URL = "https://api.nytimes.com/svc/search/v2/";
-    private static final String API_KEY = "d97d63c8ff3d421e9ce6b451e9332a06";
     private static final String KEY_API = "api-key";
 
     private OkHttpClient client;
@@ -65,7 +65,7 @@ public class NewYorkTimesClient {
 
                 HttpUrl url = originalUrl
                         .newBuilder()
-                        .addQueryParameter(KEY_API, API_KEY)
+                        .addQueryParameter(KEY_API, BuildConfig.NYT_API_KEY)
                         .build();
 
                 Request request = originalRequest
