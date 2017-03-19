@@ -45,15 +45,18 @@ The following **additional** features are implemented:
 * [ ] Added ability to persist bookmarks when app is opened again
 * [ ] Used BuildConfig to store API key
 * [ ] Used Snackbar to provide user feedback upon loading
-* [ ] Better request handling: prevented the state in which a request is made with both a query
+* [x] Better request handling: prevented the state in which a request is made with both a query
 and a news desk value (the Article Search API returns nothing if both are added to the request)
 * [ ] Added top news for the day upon load
 * [ ] Added NavigationDrawer to hold various news options
-* [ ] Added RequestInterceptor to automatically add API key to every request
+* [x] Added RequestInterceptor to automatically add API key to every request
 * [x] Added GSON for every part of the Article Search API (Article class is a wrapper for the
 relevant information, but each part of the API has a corresponding Retrofit class)
-* [ ] Added custom fonts to assets/ for better UI
-* [ ] Used Butterknife for view binding
+* [ ] Added custom fonts to for better UI
+* [x] Used Butterknife for view binding
+* [ ] Added ProgressBar to indicate to the user that the app is loading a new article list for
+better UX
+* [ ] Added CardView for each article
 
 ## Video Walkthrough
 
