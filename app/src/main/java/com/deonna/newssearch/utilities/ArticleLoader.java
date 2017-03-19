@@ -2,7 +2,6 @@ package com.deonna.newssearch.utilities;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.models.Article;
@@ -31,6 +30,13 @@ public class ArticleLoader {
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
+    //Current filters
+    private String query = null;
+    private String sortOrder = null;
+    private String beginDate = null;
+    private String newsDeskFilter = null;
+    private String page = null;
+
     public ArticleLoader(List<Article> articles, ArticlesAdapter articlesAdapter, StaggeredGridLayoutManager layoutManager) {
 
         client = new NewYorkTimesClient();
@@ -54,24 +60,30 @@ public class ArticleLoader {
 
     private void loadEndlessScrollArticles(int page) {
 
-        client.getArticlesByPage(Integer.valueOf(page).toString(), currentQuery, new Callback<QueryResponse>() {
-            @Override
-            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
+       client.getArticlesByPage(
+               currentQuery,
+               sortOrder,
+               beginDate,
+               newsDeskFilter,
+               Integer.valueOf(page).toString(),
+               new Callback<QueryResponse>() {
+                @Override
+                public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
 
-                if (response.isSuccessful()) {
+                    if (response.isSuccessful()) {
 
-                    QueryResponse queryResponse = response.body();
-                    List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
+                        QueryResponse queryResponse = response.body();
+                        List<Article> moreArticles = Article.fromQueryResponse(queryResponse);
 
-                    articles.addAll(moreArticles);
-                    notifyArticlesChanged(moreArticles.size());
+                        articles.addAll(moreArticles);
+                        notifyArticlesChanged(moreArticles.size());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
+                @Override
+                public void onFailure(Call<QueryResponse> call, Throwable t) {
 
-            }
+                }
         });
 
         currentPage = page + 1;
@@ -91,78 +103,12 @@ public class ArticleLoader {
         currentPage = 0;
         scrollListener.resetState();
         articles.clear();
+        articlesAdapter.notifyDataSetChanged();
     }
 
-    public void loadArticleByQuery(String query) {
+    public void loadArticles(String query) {
 
-        resetArticleState();
-
-        client.getArticlesFromQuery(
-            query,
-            new Callback<QueryResponse>() {
-                @Override
-                public void onResponse(Call<QueryResponse> call, retrofit2.Response<QueryResponse> response) {
-
-                    QueryResponse queryResponse = response.body();
-
-                    articles.addAll(Article.fromQueryResponse(queryResponse));
-
-                    articlesAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-                    Log.d(TAG, "Failed to complete GET request");
-                }
-            }
-        );
-    }
-
-    public List<Article> loadArticlesNewestToOldest() {
-
-        resetArticleState();
-
-        client.getArticlesSortedNewestToOldest(currentQuery, new Callback<QueryResponse>() {
-
-            @Override
-            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
-
-                QueryResponse queryResponse = response.body();
-
-                articles.addAll(Article.fromQueryResponse(queryResponse));
-            }
-
-            @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-            }
-        });
-
-        return articles;
-    }
-
-    public List<Article> loadArticlesOldestToNewest() {
-
-        resetArticleState();
-
-        client.getArticlesSortedOldestToNewest(currentQuery, new Callback<QueryResponse>() {
-
-            @Override
-            public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
-
-                QueryResponse queryResponse = response.body();
-
-                articles.addAll(Article.fromQueryResponse(queryResponse));
-            }
-
-            @Override
-            public void onFailure(Call<QueryResponse> call, Throwable t) {
-
-            }
-        });
-
-        return articles;
+        loadArticles(query, sortOrder, beginDate, newsDeskFilter, page);
     }
 
     public void loadArticles(
@@ -173,6 +119,12 @@ public class ArticleLoader {
             String page) {
 
         resetArticleState();
+
+        this.query = query;
+        this.sortOrder = sortOrder;
+        this.beginDate = beginDate;
+        this.newsDeskFilter = newsDeskFilter;
+        this.page = page;
 
         client.getArticles(
                 query,

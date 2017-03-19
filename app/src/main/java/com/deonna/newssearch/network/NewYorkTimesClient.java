@@ -21,9 +21,6 @@ public class NewYorkTimesClient {
     private static final String BASE_URL = "https://api.nytimes.com/svc/search/v2/";
     private static final String API_KEY = "d97d63c8ff3d421e9ce6b451e9332a06";
     private static final String KEY_API = "api-key";
-    private static final String KEY_OLDEST = "oldest";
-    private static final String KEY_NEWEST = "newest";
-
 
     private OkHttpClient client;
     private Retrofit retrofit;
@@ -44,16 +41,16 @@ public class NewYorkTimesClient {
         service = retrofit.create(NewYorkTimesService.class);
     }
 
-    public void getArticlesFromQuery(String query, Callback<QueryResponse> callback) {
+    public void getArticlesByPage(
+            String query,
+            String sortOrder,
+            String beginDate,
+            String newsDeskFilter,
+            String page,
+            Callback<QueryResponse> callback) {
 
-        Call<QueryResponse> call = service.getArticlesFromQuery(query);
-
-        call.enqueue(callback);
-    }
-
-    public void getArticlesByPage(String page, String query, Callback<QueryResponse> callback) {
-
-        Call<QueryResponse> call = service.getArticlesByPage(page, query);
+        Call<QueryResponse> call = service.getArticlesByPage(query, sortOrder, beginDate,
+                newsDeskFilter, page);
 
         call.enqueue(callback);
     }
@@ -79,20 +76,6 @@ public class NewYorkTimesClient {
                 return chain.proceed(request);
             }
         };
-    }
-
-    public void getArticlesSortedOldestToNewest(String query, Callback<QueryResponse> callback) {
-
-        Call<QueryResponse> call = service.getArticlesSortedOldestToNewest(query, KEY_OLDEST);
-
-        call.enqueue(callback);
-    }
-
-    public void getArticlesSortedNewestToOldest(String query, Callback<QueryResponse> callback) {
-
-        Call<QueryResponse> call = service.getArticlesSortedNewestToOldest(query, KEY_NEWEST);
-
-        call.enqueue(callback);
     }
 
     public void getArticles(

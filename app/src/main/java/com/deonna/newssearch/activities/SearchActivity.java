@@ -94,6 +94,7 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         if (newsDeskFilter != null) {
             query = null;
+            clearQuery();
         }
 
         articleLoader.loadArticles(
@@ -103,6 +104,11 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
                 newsDeskFilter,
                 page
         );
+    }
+
+    private void clearQuery() {
+
+        svArticle.setQuery("", true);
     }
 
     private String makeNewsDeskQuery(Map<String, Boolean> topics) {

@@ -22,7 +22,7 @@ public class ArticleQueryListener implements SearchView.OnQueryTextListener {
 
         articleLoader.currentQuery = query;
 
-        articleLoader.loadArticleByQuery(query);
+        articleLoader.loadArticles(query);
         searchView.clearFocus();
 
         return true;

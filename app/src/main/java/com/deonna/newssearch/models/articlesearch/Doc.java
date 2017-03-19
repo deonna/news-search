@@ -42,7 +42,7 @@ public class Doc {
     public String documentType;
     @SerializedName("news_desK")
     @Expose
-    public String newsDesK;
+    public String newsDesk;
     @SerializedName("section_name")
     @Expose
     public String sectionName;

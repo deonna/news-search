@@ -16,35 +16,12 @@ public interface NewYorkTimesService {
     String KEY_FQ = "fq";
 
     @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesFromQuery(@Query(KEY_QUERY) String query);
-
-    @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesByPage(@Query(KEY_PAGE) String page, @Query(KEY_QUERY) String
-            query);
-
-    @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesFromQueryBetweenDates(
+    Call<QueryResponse> getArticlesByPage(
             @Query(KEY_QUERY) String query,
-            @Query(KEY_BEGIN_DATE) String startDate,
-            @Query(KEY_END_DATE) String endDate
-    );
-
-    @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesSortedOldestToNewest(
-            @Query(KEY_QUERY) String query,
-            @Query(KEY_SORT) String sortOrder
-    );
-
-    @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesSortedNewestToOldest(
-            @Query(KEY_QUERY) String query,
-            @Query(KEY_SORT) String sortOrder
-    );
-
-    @GET("articlesearch.json")
-    Call<QueryResponse> getArticlesWithBeginDateAndQuery(
-            @Query(KEY_QUERY) String query,
-            @Query(KEY_SORT) String sortOrder
+            @Query(KEY_SORT) String sortOrder,
+            @Query(KEY_BEGIN_DATE) String beginDate,
+            @Query(KEY_FQ) String newsDeskFilter,
+            @Query(KEY_PAGE) String page
     );
 
     @GET("articlesearch.json")
