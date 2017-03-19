@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.deonna.newssearch.R;
-import com.deonna.newssearch.activities.ArticleActivity;
+import com.deonna.newssearch.activities.ChromeArticleActivity;
 import com.deonna.newssearch.models.Article;
 
 import java.util.List;
@@ -150,7 +150,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Context context = cvArticle.getContext();
 
-            Intent intent = new Intent(context, ArticleActivity.class);
+            Intent intent = new Intent(context, ChromeArticleActivity.class);
             intent.putExtra(KEY_URL, article.url);
 
             context.startActivity(intent);
