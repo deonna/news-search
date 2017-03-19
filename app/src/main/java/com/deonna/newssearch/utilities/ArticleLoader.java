@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.deonna.newssearch.adapters.ArticlesAdapter;
+import com.deonna.newssearch.listeners.ProgressBarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
@@ -28,6 +29,7 @@ public class ArticleLoader {
     private NewYorkTimesClient client;
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
+    private ProgressBarListener progressBarListener;
 
     //Current filters
     public String query = null;
@@ -36,7 +38,8 @@ public class ArticleLoader {
     private String newsDeskFilter = null;
     private String page = null;
 
-    public ArticleLoader(List<Article> articles, ArticlesAdapter articlesAdapter, StaggeredGridLayoutManager layoutManager) {
+    public ArticleLoader(List<Article> articles, ArticlesAdapter articlesAdapter,
+                         StaggeredGridLayoutManager layoutManager, ProgressBarListener listener) {
 
         client = new NewYorkTimesClient();
 
@@ -44,6 +47,7 @@ public class ArticleLoader {
         this.articlesAdapter = articlesAdapter;
 
         scrollListener = initializeEndlessScrollListener(layoutManager);
+        progressBarListener = listener;
     }
 
     private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
@@ -125,6 +129,8 @@ public class ArticleLoader {
 
         resetArticleState();
 
+        progressBarListener.showProgressBar();
+
         this.query = query;
         this.sortOrder = sortOrder;
         this.beginDate = beginDate;
@@ -147,6 +153,7 @@ public class ArticleLoader {
                             articles.addAll(Article.fromQueryResponse(queryResponse));
 
                             articlesAdapter.notifyDataSetChanged();
+                            progressBarListener.hideProgressBar();
                         }
                     }
 

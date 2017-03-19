@@ -47,7 +47,7 @@ The following **additional** features are implemented:
 * [x] Added GSON for every part of the Article Search API (Article class is a wrapper for the relevant information, but each part of the API has a corresponding Retrofit class)
 * [x] Used Butterknife for view binding
 * [x] Added top news for the day upon load for better UX
-* [ ] Added ProgressBar to indicate to the user that the app is loading a new article list for
+* [x] Added ProgressBar to indicate to the user that the app is loading a new article list for
 better UX
 * [ ] Used BuildConfig to store API key instead of storing in GitHub for good best practices
 * [ ] Added bookmarking and ability to view bookmarked articles

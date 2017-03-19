@@ -7,13 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.fragments.FilterFragment;
 import com.deonna.newssearch.listeners.ArticleQueryHandler;
 import com.deonna.newssearch.listeners.ArticlesFilterListener;
+import com.deonna.newssearch.listeners.ProgressBarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
@@ -24,10 +27,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener {
+public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener, ProgressBarListener {
 
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
+
+    @BindView(R.id.pbArticlesLoading) ProgressBar pbArticlesLoading;
 
     @BindView(R.id.tbArticles) Toolbar tbArticles;
     @BindView(R.id.rvArticles) RecyclerView rvArticles;
@@ -77,7 +82,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setAdapter(articlesAdapter);
         rvArticles.setLayoutManager(layoutManager);
 
-        articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager);
+        articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
+                SearchActivity.this);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
 
         articleLoader.loadArticles(null);
@@ -113,6 +119,18 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
         articleLoader.query = null;
         svArticle.setQuery(null, true);
+    }
+
+    @Override
+    public void showProgressBar() {
+
+        pbArticlesLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+
+        pbArticlesLoading.setVisibility(View.INVISIBLE);
     }
 
 //    private ActionBarDrawerToggle drawerToggle;

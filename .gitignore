@@ -65,3 +65,5 @@ freeline/
 freeline_project_description.json
 
 ### Android Patch ###
+
+/apikey.properties
