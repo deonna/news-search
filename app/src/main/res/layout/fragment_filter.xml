@@ -1,116 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvBeginDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_horizontal"
-        android:text="@string/begin_date" />
-
-    <DatePicker
-        android:id="@+id/dpBeginDate"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <RelativeLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp">
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-        <Spinner
-            android:id="@+id/spSortOrder"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tvBeginDate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="@string/newest_first"
-            android:entries="@array/sort_options"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:gravity="center_horizontal"
+            android:text="@string/begin_date" />
 
+        <DatePicker
+            android:id="@+id/dpBeginDate"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:id="@+id/llSections"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spSortOrder"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
+            android:layout_marginTop="24dp">
 
-            <CheckBox
-                android:id="@+id/cbArts"
+            <Spinner
+                android:id="@+id/spSortOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"/>
+                android:prompt="@string/newest_first"
+                android:entries="@array/sort_options"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:id="@+id/tvArts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/arts"
-                android:layout_alignBaseline="@+id/cbArts"
-                android:layout_alignBottom="@+id/cbArts"
-                android:layout_toRightOf="@+id/cbArts"
-                android:layout_toEndOf="@+id/cbArts" />
 
-            <CheckBox
-                android:id="@+id/cbFashion"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/llSections"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/cbArts"/>
+                android:layout_below="@+id/spSortOrder"
+                android:layout_marginTop="20dp"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/tvFashion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fashion"
-                android:layout_alignBaseline="@+id/cbFashion"
-                android:layout_alignBottom="@+id/cbFashion"
-                android:layout_toRightOf="@+id/cbFashion"
-                android:layout_toEndOf="@+id/cbFashion" />
+                <CheckBox
+                    android:id="@+id/cbArts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"/>
 
-            <CheckBox
-                android:id="@+id/cbSports"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/cbFashion"/>
+                <TextView
+                    android:id="@+id/tvArts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/arts"
+                    android:layout_alignBaseline="@+id/cbArts"
+                    android:layout_alignBottom="@+id/cbArts"
+                    android:layout_toRightOf="@+id/cbArts"
+                    android:layout_toEndOf="@+id/cbArts" />
 
-            <TextView
-                android:id="@+id/tvSports"
-                android:layout_width="wrap_content"
+                <CheckBox
+                    android:id="@+id/cbFashion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/cbArts"/>
+
+                <TextView
+                    android:id="@+id/tvFashion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fashion"
+                    android:layout_alignBaseline="@+id/cbFashion"
+                    android:layout_alignBottom="@+id/cbFashion"
+                    android:layout_toRightOf="@+id/cbFashion"
+                    android:layout_toEndOf="@+id/cbFashion" />
+
+                <CheckBox
+                    android:id="@+id/cbSports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/cbFashion"/>
+
+                <TextView
+                    android:id="@+id/tvSports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sports"
+                    android:layout_alignBaseline="@+id/cbSports"
+                    android:layout_alignBottom="@+id/cbSports"
+                    android:layout_toRightOf="@+id/cbSports"
+                    android:layout_toEndOf="@+id/cbSports" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnApply"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sports"
-                android:layout_alignBaseline="@+id/cbSports"
-                android:layout_alignBottom="@+id/cbSports"
-                android:layout_toRightOf="@+id/cbSports"
-                android:layout_toEndOf="@+id/cbSports" />
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"
+                android:text="@string/apply"/>
 
         </RelativeLayout>
-
-        <Button
-            android:id="@+id/btnApply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:textColor="@android:color/white"
-            android:text="@string/apply"/>
-
-    </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+</layout>

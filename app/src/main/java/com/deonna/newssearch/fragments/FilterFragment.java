@@ -13,15 +13,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.deonna.newssearch.R;
-import com.deonna.newssearch.listeners.ArticleFilterListener;
+import com.deonna.newssearch.listeners.ArticlesFilterListener;
+import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +24,7 @@ import butterknife.Unbinder;
 public class FilterFragment extends DialogFragment {
 
     private static final String KEY_TITLE = "title";
-
-    private static final String FORMAT_PATTERN = "yyyyMMdd";
+    public static final String NAME = "fragment_filter";
 
     @BindView(R.id.dpBeginDate) DatePicker dpBeginDate;
     @BindView(R.id.spSortOrder) Spinner spSortOrder;
@@ -46,6 +39,8 @@ public class FilterFragment extends DialogFragment {
 
     @BindView(R.id.btnApply) Button btnApply;
 
+    private ArticlesFilter articlesFilter;
+
     private Unbinder unbinder;
 
     public static FilterFragment newInstance() {
@@ -59,10 +54,15 @@ public class FilterFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        articlesFilter = new ArticlesFilter();
+
         View fragmentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_filter,
                 container);
         unbinder = ButterKnife.bind(this, fragmentView);
 
+//        binding = DataBindingUtil.inflate(getActivity().getLayoutInflater(), R.layout
+//                .fragment_filter, container, false);
+//
         btnApply.setOnClickListener((view) -> {
             saveFilterChanges();
         });
@@ -79,19 +79,28 @@ public class FilterFragment extends DialogFragment {
 
     public void saveFilterChanges() {
 
-        ArticleFilterListener listener = (ArticleFilterListener) getActivity();
+        ArticlesFilterListener listener = (ArticlesFilterListener) getActivity();
 
-        String beginDate = getFormattedDate(dpBeginDate); //TODO: give option to make begin date null (have no begin date)
+        articlesFilter.setFormattedDate(
+                dpBeginDate.getYear(),
+                dpBeginDate.getMonth(),
+                dpBeginDate.getDayOfMonth()
+        );
 
-        Map<String, Boolean> topics = new HashMap<>();
+        //TODO: give option
+        // to
+        // make begin
+        // date null
+        // (have no
+        // begin date)
 
-        String sortOrderParam = getSortOrderParam(spSortOrder);
+        articlesFilter.addTopic(tvArts.getText().toString(), cbArts.isChecked());
+        articlesFilter.addTopic(tvFashion.getText().toString(), cbFashion.isChecked());
+        articlesFilter.addTopic(tvSports.getText().toString(), cbSports.isChecked());
 
-        topics.put(tvArts.getText().toString().toLowerCase(), cbArts.isChecked());
-        topics.put(tvFashion.getText().toString().toLowerCase(), cbFashion.isChecked());
-        topics.put(tvSports.getText().toString().toLowerCase(), cbSports.isChecked());
+        articlesFilter.sortOrder = getSortOrderParam(spSortOrder);
 
-        listener.onApplyFilters(beginDate, sortOrderParam, topics);
+        listener.onApplyFilters(articlesFilter);
 
         dismiss();
     }
@@ -112,21 +121,5 @@ public class FilterFragment extends DialogFragment {
         }
 
         return sortOrderParam;
-    }
-
-    private static String getFormattedDate(DatePicker dpDate) {
-
-        int year = dpDate.getYear();
-        int month = dpDate.getMonth();
-        int day = dpDate.getDayOfMonth();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-
-        Date date = new Date(calendar.getTimeInMillis());
-
-        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_PATTERN, Locale.US);
-
-        return formatter.format(date);
     }
 }

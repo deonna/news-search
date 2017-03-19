@@ -12,19 +12,19 @@ import android.widget.ImageView;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.fragments.FilterFragment;
-import com.deonna.newssearch.listeners.ArticleFilterListener;
 import com.deonna.newssearch.listeners.ArticleQueryListener;
+import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchActivity extends AppCompatActivity implements ArticleFilterListener {
+public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener {
 
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
@@ -81,15 +81,13 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         FragmentManager fm = getSupportFragmentManager();
         FilterFragment filterFragment = FilterFragment.newInstance();
-        filterFragment.show(fm, "fragment_filter");
+        filterFragment.show(fm, FilterFragment.NAME);
     }
 
     @Override
-    public void onApplyFilters(String beginDate, String sortOrderParam, Map<String, Boolean> topics) {
-        // construct query with all these params
+    public void onApplyFilters(ArticlesFilter articlesFilter) {
 
-        String sortOrder = sortOrderParam.isEmpty() ? null : sortOrderParam;
-        String newsDeskFilter = makeNewsDeskQuery(topics);
+        String newsDeskFilter = articlesFilter.makeNewsDeskQuery();
         String page = null;
 
         if (newsDeskFilter != null) {
@@ -98,8 +96,8 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         articleLoader.loadArticles(
                 articleLoader.query,
-                sortOrder,
-                beginDate,
+                articlesFilter.sortOrder,
+                articlesFilter.beginDate,
                 newsDeskFilter,
                 page
         );
@@ -109,32 +107,6 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         articleLoader.query = null;
         svArticle.setQuery(null, true);
-    }
-
-    private String makeNewsDeskQuery(Map<String, Boolean> topics) {
-
-        String newsDeskFilter = null; //Format: fq=news_desk:("Education"%20"Health")
-
-        for(Map.Entry<String, Boolean> entry : topics.entrySet()) {
-
-            String topic = entry.getKey();
-            Boolean isSelected = entry.getValue();
-
-            if (isSelected) {
-
-                if (newsDeskFilter == null) {
-                    newsDeskFilter = String.format("news_desk:(\"%s\"", topic);
-                } else {
-                    newsDeskFilter = String.format("%s%%20\"%s\"", newsDeskFilter, topic);
-                }
-            }
-        }
-
-        if (newsDeskFilter != null) {
-            newsDeskFilter = String.format("%s)", newsDeskFilter);
-        }
-
-        return newsDeskFilter;
     }
 
 //    private ActionBarDrawerToggle drawerToggle;
