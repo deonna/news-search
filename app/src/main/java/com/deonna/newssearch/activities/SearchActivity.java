@@ -17,6 +17,7 @@ import com.deonna.newssearch.fragments.FilterFragment;
 import com.deonna.newssearch.listeners.ArticleQueryHandler;
 import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.listeners.ProgressBarListener;
+import com.deonna.newssearch.listeners.ScrollToTopListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
@@ -27,7 +28,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener, ProgressBarListener {
+public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener,
+        ProgressBarListener, ScrollToTopListener {
 
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
@@ -83,7 +85,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setLayoutManager(layoutManager);
 
         articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
-                SearchActivity.this);
+                SearchActivity.this, SearchActivity.this);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
 
         articleLoader.loadArticles(null);
@@ -131,6 +133,12 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     public void hideProgressBar() {
 
         pbArticlesLoading.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void scrollToTop() {
+
+        ((StaggeredGridLayoutManager) rvArticles.getLayoutManager()).scrollToPositionWithOffset(0, 0);
     }
 
 //    private ActionBarDrawerToggle drawerToggle;
