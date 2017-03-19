@@ -19,7 +19,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -89,6 +88,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            cvArticle.setOnClickListener((view) -> {
+                openArticle();
+            });
         }
 
         public void setArticle(Article article) {
@@ -96,7 +99,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.article = article;
         }
 
-        @OnClick(R.id.cvArticle)
         public void openArticle() {
 
             Context context = cvArticle.getContext();

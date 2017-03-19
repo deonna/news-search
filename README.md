@@ -2,7 +2,7 @@
 
 **News Search** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
 
-Time spent: **16** hours spent in total
+Time spent: **18** hours spent in total
 
 ## User Stories
 
@@ -33,14 +33,26 @@ The following **bonus** features are implemented:
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [ ] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
 * [x] Replace Picasso with [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
-* [ ] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to cleanup event handling blocks.
+* [x] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to
+cleanup event handling blocks.
 * [x] Leverages the popular [GSON library](http://guides.codepath.com/android/Using-Android-Async-Http-Client#decoding-with-gson-library) to streamline the parsing of JSON data.
 * [x] Leverages the [Retrofit networking library](http://guides.codepath.com/android/Consuming-APIs-with-Retrofit) to access the New York Times API.
-* [x] Replace the embedded `WebView` with [Chrome Custom Tabs](http://guides.codepath.com/android/Chrome-Custom-Tabs) using a custom action button for sharing. (_**2 points**_)
+* [ ] Replace the embedded `WebView` with [Chrome Custom Tabs](http://guides.codepath.com/android/Chrome-Custom-Tabs) using a custom action button for sharing. (_**2 points**_)
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [ ] Added bookmarking and ability to view bookmarked articles
+* [ ] Added ability to persist bookmarks when app is opened again
+* [ ] Used BuildConfig to store API key
+* [ ] Used Snackbar to provide user feedback
+* [ ] Better request handling: prevented the state in which a request is made with both a query
+and a news desk value (the Article Search API returns nothing if both are added to the request)
+* [ ] Added top news for the day upon load
+* [ ] Added NavigationDrawer to hold various news options
+* [ ] Added RequestInterceptor to automatically add API key to every request
+* [ ] Added GSON for every part of the Article Search API (Article class is a wrapper for the
+relevant information, but each part of the API has a corresponding Retrofit class)
+* [ ] Added custom fonts to assets/ for better UI
 
 ## Video Walkthrough
 
@@ -52,7 +64,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Endless scroll was painful.
 
 ## Open-source libraries used
 

@@ -23,7 +23,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SearchActivity extends AppCompatActivity implements ArticleFilterListener {
 
@@ -56,6 +55,10 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         svArticle.setQueryHint(QUERY_HINT);
         ArticleQueryListener articleQueryListener = new ArticleQueryListener(svArticle, articleLoader);
+
+        ivFilter.setOnClickListener((view) -> {
+            openFilterDialog();
+        });
 //        initializeSidebar();
     }
 
@@ -74,7 +77,6 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
     }
 
-    @OnClick(R.id.ivFilter)
     public void openFilterDialog() {
 
         FragmentManager fm = getSupportFragmentManager();

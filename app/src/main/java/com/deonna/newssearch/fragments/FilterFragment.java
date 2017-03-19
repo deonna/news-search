@@ -1,8 +1,8 @@
 package com.deonna.newssearch.fragments;
 
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class FilterFragment extends DialogFragment {
@@ -60,10 +59,15 @@ public class FilterFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_filter, container);
-        unbinder = ButterKnife.bind(this, view);
+        View fragmentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_filter,
+                container);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
-        return view;
+        btnApply.setOnClickListener((view) -> {
+            saveFilterChanges();
+        });
+
+        return fragmentView;
     }
 
     @Override
@@ -73,7 +77,6 @@ public class FilterFragment extends DialogFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.btnApply)
     public void saveFilterChanges() {
 
         ArticleFilterListener listener = (ArticleFilterListener) getActivity();
