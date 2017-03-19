@@ -49,14 +49,9 @@ public class FilterFragment extends DialogFragment {
 
     private Unbinder unbinder;
 
-    public static FilterFragment newInstance(String title) {
+    public static FilterFragment newInstance() {
 
         FilterFragment filterFragment = new FilterFragment();
-
-        Bundle args = new Bundle();
-        args.putString(KEY_TITLE, title);
-
-        filterFragment.setArguments(args);
 
         return filterFragment;
     }

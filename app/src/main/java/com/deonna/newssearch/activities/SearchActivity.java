@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
     public void openFilterDialog() {
 
         FragmentManager fm = getSupportFragmentManager();
-        FilterFragment filterFragment = FilterFragment.newInstance("Set Filters");
+        FilterFragment filterFragment = FilterFragment.newInstance();
         filterFragment.show(fm, "fragment_filter");
     }
 
@@ -89,8 +89,25 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
 
         String query = articleLoader.currentQuery.isEmpty() ? null : articleLoader.currentQuery;
         String sortOrder = sortOrderParam.isEmpty() ? null : sortOrderParam;
-        String newsDeskFilter = null; //Format: fq=news_desk:("Education"%20"Health")
+        String newsDeskFilter = makeNewsDeskQuery(topics);
         String page = null;
+
+        if (newsDeskFilter != null) {
+            query = null;
+        }
+
+        articleLoader.loadArticles(
+                query,
+                sortOrder,
+                beginDate,
+                newsDeskFilter,
+                page
+        );
+    }
+
+    private String makeNewsDeskQuery(Map<String, Boolean> topics) {
+
+        String newsDeskFilter = null; //Format: fq=news_desk:("Education"%20"Health")
 
         for(Map.Entry<String, Boolean> entry : topics.entrySet()) {
 
@@ -107,15 +124,11 @@ public class SearchActivity extends AppCompatActivity implements ArticleFilterLi
             }
         }
 
-        newsDeskFilter = String.format("%s)", newsDeskFilter);
+        if (newsDeskFilter != null) {
+            newsDeskFilter = String.format("%s)", newsDeskFilter);
+        }
 
-        articleLoader.loadArticles(
-                query,
-                sortOrder,
-                beginDate,
-                newsDeskFilter,
-                page
-        );
+        return newsDeskFilter;
     }
 
 //    private ActionBarDrawerToggle drawerToggle;

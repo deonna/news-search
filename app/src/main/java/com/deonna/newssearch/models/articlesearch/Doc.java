@@ -49,9 +49,6 @@ public class Doc {
     @SerializedName("subsection_name")
     @Expose
     public String subsectionName;
-    @SerializedName("byline")
-    @Expose
-    public Byline byline;
     @SerializedName("type_of_material")
     @Expose
     public String typeOfMaterial;
