@@ -39,6 +39,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
+    ArticlesFilter articlesFilter;
     private ArticleLoader articleLoader;
 
     @Override
@@ -67,6 +68,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         articles = new ArrayList<>();
         articlesAdapter = new ArticlesAdapter(this, articles);
 
+        articlesFilter = new ArticlesFilter();
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, StaggeredGridLayoutManager
                 .VERTICAL);
 
@@ -80,7 +83,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     public void openFilterDialog() {
 
         FragmentManager fm = getSupportFragmentManager();
-        FilterFragment filterFragment = FilterFragment.newInstance();
+        FilterFragment filterFragment = FilterFragment.newInstance(articlesFilter);
         filterFragment.show(fm, FilterFragment.NAME);
     }
 
@@ -96,8 +99,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
         articleLoader.loadArticles(
                 articleLoader.query,
-                articlesFilter.sortOrder,
-                articlesFilter.beginDate,
+                articlesFilter.sortOrderParam,
+                articlesFilter.beginDateFormatted,
                 newsDeskFilter,
                 page
         );

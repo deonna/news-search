@@ -25,6 +25,7 @@ public class FilterFragment extends DialogFragment {
 
     private static final String KEY_TITLE = "title";
     public static final String NAME = "fragment_filter";
+    private static final String KEY_ARTICLES_FILTER = "articles_filter";
 
     @BindView(R.id.dpBeginDate) DatePicker dpBeginDate;
     @BindView(R.id.spSortOrder) Spinner spSortOrder;
@@ -43,9 +44,14 @@ public class FilterFragment extends DialogFragment {
 
     private Unbinder unbinder;
 
-    public static FilterFragment newInstance() {
+    public static FilterFragment newInstance(ArticlesFilter articlesFilter) {
 
         FilterFragment filterFragment = new FilterFragment();
+
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_ARTICLES_FILTER, articlesFilter);
+
+        filterFragment.setArguments(args);
 
         return filterFragment;
     }
@@ -54,20 +60,28 @@ public class FilterFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        articlesFilter = new ArticlesFilter();
+        articlesFilter = getArguments().getParcelable(KEY_ARTICLES_FILTER);
 
         View fragmentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_filter,
                 container);
         unbinder = ButterKnife.bind(this, fragmentView);
 
-//        binding = DataBindingUtil.inflate(getActivity().getLayoutInflater(), R.layout
-//                .fragment_filter, container, false);
-//
+        intializeViewsFromPreviousFilter();
+
         btnApply.setOnClickListener((view) -> {
             saveFilterChanges();
         });
 
         return fragmentView;
+    }
+
+    public void intializeViewsFromPreviousFilter() {
+
+        spSortOrder.setSelection(articlesFilter.sortOrder);
+
+        cbArts.setChecked(articlesFilter.isTopicSelected(tvArts.getText().toString()));
+        cbFashion.setChecked(articlesFilter.isTopicSelected(tvFashion.getText().toString()));
+        cbSports.setChecked(articlesFilter.isTopicSelected(tvSports.getText().toString()));
     }
 
     @Override
@@ -98,16 +112,16 @@ public class FilterFragment extends DialogFragment {
         articlesFilter.addTopic(tvFashion.getText().toString(), cbFashion.isChecked());
         articlesFilter.addTopic(tvSports.getText().toString(), cbSports.isChecked());
 
-        articlesFilter.sortOrder = getSortOrderParam(spSortOrder);
+        setSortOrder();
 
         listener.onApplyFilters(articlesFilter);
 
         dismiss();
     }
 
-    private String getSortOrderParam(Spinner spSort) {
+    private void setSortOrder() {
 
-        TextView textView = (TextView) spSort.getSelectedView();
+        TextView textView = (TextView) spSortOrder.getSelectedView();
         String sortOrder = textView.getText().toString();
 
         String sortOrderParam;
@@ -116,10 +130,11 @@ public class FilterFragment extends DialogFragment {
 
         if (sortOrder.toLowerCase().equals(NEWEST_FIRST)) {
             sortOrderParam = ArticleLoader.KEY_NEWEST;
+            articlesFilter.setSortOrder(ArticlesFilter.SORT_NEWEST, sortOrderParam);
         } else {
             sortOrderParam = ArticleLoader.KEY_OLDEST;
+            articlesFilter.setSortOrder(ArticlesFilter.SORT_OLDEST, sortOrderParam);
         }
 
-        return sortOrderParam;
     }
 }
