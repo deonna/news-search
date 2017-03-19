@@ -1,7 +1,9 @@
 package com.deonna.newssearch.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +20,7 @@ import com.deonna.newssearch.listeners.ArticleQueryHandler;
 import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.listeners.ProgressBarListener;
 import com.deonna.newssearch.listeners.ScrollToTopListener;
+import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
@@ -29,10 +32,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener,
-        ProgressBarListener, ScrollToTopListener {
+        ProgressBarListener, ScrollToTopListener, SnackbarListener {
 
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
+
+    @BindView(R.id.dlArticles) DrawerLayout dlArticles;
 
     @BindView(R.id.pbArticlesLoading) ProgressBar pbArticlesLoading;
 
@@ -46,7 +51,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     private List<Article> articles;
     private ArticlesAdapter articlesAdapter;
 
-    ArticlesFilter articlesFilter;
+    private ArticlesFilter articlesFilter;
     private ArticleLoader articleLoader;
 
     @Override
@@ -85,7 +90,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setLayoutManager(layoutManager);
 
         articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
-                SearchActivity.this, SearchActivity.this);
+                SearchActivity.this, SearchActivity.this, SearchActivity.this);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
 
         articleLoader.loadArticles(null);
@@ -138,7 +143,14 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     @Override
     public void scrollToTop() {
 
-        ((StaggeredGridLayoutManager) rvArticles.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+//        ((StaggeredGridLayoutManager) rvArticles.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+        rvArticles.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void showSnackbar() {
+
+        Snackbar.make(dlArticles, R.string.loading, Snackbar.LENGTH_SHORT).show();
     }
 
 //    private ActionBarDrawerToggle drawerToggle;

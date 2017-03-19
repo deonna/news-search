@@ -50,7 +50,7 @@ The following **additional** features are implemented:
 * [x] Added ProgressBar to indicate to the user that the app is loading a new article list for
 better UX
 * [x] Used BuildConfig to store API key instead of storing in GitHub for good best practices
-* [ ] Used Snackbar to provide user feedback upon loading during endless scroll for better UX
+* [x] Used Snackbar to provide user feedback upon loading during endless scroll for better UX
 * [ ] Added custom fonts to for better UI
 * [ ] Added bookmarking and ability to view bookmarked articles
 * [ ] Added pull to refresh for reloading article query

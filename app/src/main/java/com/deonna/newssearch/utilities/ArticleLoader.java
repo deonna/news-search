@@ -6,6 +6,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.listeners.ProgressBarListener;
 import com.deonna.newssearch.listeners.ScrollToTopListener;
+import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 import com.deonna.newssearch.network.NewYorkTimesClient;
@@ -32,6 +33,7 @@ public class ArticleLoader {
     private ArticlesAdapter articlesAdapter;
     private ProgressBarListener progressBarListener;
     private ScrollToTopListener scrollToTopListener;
+    private SnackbarListener snackbarListener;
 
     //Current filters
     public String query = null;
@@ -44,7 +46,8 @@ public class ArticleLoader {
                          ArticlesAdapter articlesAdapter,
                          StaggeredGridLayoutManager layoutManager,
                          ProgressBarListener progressBarListener,
-                         ScrollToTopListener scrollToTopListener) {
+                         ScrollToTopListener scrollToTopListener,
+                         SnackbarListener snackbarListener) {
 
         client = new NewYorkTimesClient();
 
@@ -54,6 +57,7 @@ public class ArticleLoader {
         scrollListener = initializeEndlessScrollListener(layoutManager);
         this.progressBarListener = progressBarListener;
         this.scrollToTopListener = scrollToTopListener;
+        this.snackbarListener = snackbarListener;
     }
 
     private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
@@ -72,6 +76,8 @@ public class ArticleLoader {
        if (newsDeskFilter != null) {
            query = null;
        }
+
+       snackbarListener.showSnackbar();
 
        client.getArticlesByPage(
                query,
