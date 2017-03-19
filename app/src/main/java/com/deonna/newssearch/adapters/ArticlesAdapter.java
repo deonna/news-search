@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ArticleActivity;
 import com.deonna.newssearch.models.Article;
-import com.deonna.newssearch.models.articlesearch.Doc;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -63,6 +62,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .into(((ArticlesViewHolder) holder).ivThumbnail);
 
 
+        ((ArticlesViewHolder) holder).tvPublicationDate.setText(article.publicationDate);
         ((ArticlesViewHolder) holder).tvTitle.setText(article.headline);
         ((ArticlesViewHolder) holder).tvSection.setText(article.section);
         ((ArticlesViewHolder) holder).tvSnippet.setText(article.snippet);
@@ -78,6 +78,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @BindView(R.id.cvArticle) CardView cvArticle;
         @BindView(R.id.ivThumbnail) ImageView ivThumbnail;
+        @BindView(R.id.tvPublicationDate) TextView tvPublicationDate;
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.tvSection) TextView tvSection;
         @BindView(R.id.tvSnippet) TextView tvSnippet;

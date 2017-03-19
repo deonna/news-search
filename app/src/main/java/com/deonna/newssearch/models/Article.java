@@ -16,7 +16,7 @@ public class Article {
     public String headline;
     public String section;
     public String snippet;
-    public String pubDate;
+    public String publicationDate;
 
     public Article(Doc doc) {
 
@@ -24,7 +24,7 @@ public class Article {
         headline = doc.headline.main;
         section = doc.sectionName;
         snippet = doc.snippet;
-        pubDate = doc.pubDate;
+        publicationDate = doc.pubDate;
 
         if (!doc.multimedia.isEmpty()) {
             //thumbnail = "http://www.nytimes.com/" + doc.multimedia.get(0).url;
