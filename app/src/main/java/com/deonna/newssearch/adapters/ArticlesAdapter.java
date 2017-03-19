@@ -25,6 +25,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final String KEY_URL = "url";
     private static final int RESIZE_VALUE = 200;
 
+    private static final int ARTICLE_DEFAULT = 0;
+    private static final int ARTICLE_NO_IMAGE = 1;
+
     private Context context;
     private List<Article> articles;
 
@@ -40,31 +43,74 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerView.ViewHolder viewHolder;
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.item_article, parent, false);
-        viewHolder = new ArticlesViewHolder(view);
+        switch (viewType) {
+            case ARTICLE_DEFAULT:
+                View defaultView = inflater.inflate(R.layout.item_article, parent, false);
+                viewHolder = new ArticlesViewHolder(defaultView);
+                break;
+            case ARTICLE_NO_IMAGE:
+                View noImageView = inflater.inflate(R.layout.item_article_no_image, parent, false);
+                viewHolder = new ArticlesNoImageViewHolder(noImageView);
+                break;
+            default:
+                View view = inflater.inflate(R.layout.item_article, parent, false);
+                viewHolder = new ArticlesViewHolder(view);
+                break;
+        }
+
 
         return viewHolder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        Article article = articles.get(position);
+
+        if (article.thumbnail == null) {
+            return ARTICLE_NO_IMAGE;
+        } {
+            return ARTICLE_DEFAULT;
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         Article article = articles.get(position);
-        ((ArticlesViewHolder) holder).setArticle(article);
 
-        (((ArticlesViewHolder) holder).ivThumbnail).setImageResource(0);
+        switch(holder.getItemViewType()) {
+
+            case ARTICLE_DEFAULT:
+                ArticlesViewHolder articlesViewHolder = (ArticlesViewHolder) holder;
+                articlesViewHolder.setArticle(article);
+                articlesViewHolder.configure();
+                loadImage(article, articlesViewHolder);
+                break;
+            case ARTICLE_NO_IMAGE:
+                ArticlesNoImageViewHolder noImageHolder = (ArticlesNoImageViewHolder) holder;
+                noImageHolder.setArticle(article);
+                noImageHolder.configure();
+                break;
+            default:
+                ArticlesViewHolder defaultHolder = (ArticlesViewHolder) holder;
+                defaultHolder.setArticle(article);
+                defaultHolder.configure();
+                loadImage(article, defaultHolder);
+                break;
+        }
+    }
+
+    private void loadImage(Article article, ArticlesViewHolder holder) {
+
+        holder.ivThumbnail.setImageResource(0);
+
         Glide
                 .with(context)
                 .load(article.thumbnail)
                 .override(RESIZE_VALUE, RESIZE_VALUE)
                 .placeholder(R.drawable.thumbnail_placeholder)
-                .into(((ArticlesViewHolder) holder).ivThumbnail);
-
-
-        ((ArticlesViewHolder) holder).tvPublicationDate.setText(article.publicationDate);
-        ((ArticlesViewHolder) holder).tvTitle.setText(article.headline);
-        ((ArticlesViewHolder) holder).tvSection.setText(article.section);
-        ((ArticlesViewHolder) holder).tvSnippet.setText(article.snippet);
+                .into(holder.ivThumbnail);
     }
 
     @Override
@@ -107,6 +153,58 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             intent.putExtra(KEY_URL, article.url);
 
             context.startActivity(intent);
+        }
+
+        public void configure() {
+
+            tvPublicationDate.setText(article.publicationDate);
+            tvTitle.setText(article.headline);
+            tvSection.setText(article.section);
+            tvSnippet.setText(article.snippet);
+        }
+    }
+
+    public static class ArticlesNoImageViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.cvArticle) CardView cvArticle;
+        @BindView(R.id.tvPublicationDate) TextView tvPublicationDate;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvSection) TextView tvSection;
+        @BindView(R.id.tvSnippet) TextView tvSnippet;
+
+        private Article article;
+
+        public ArticlesNoImageViewHolder(View itemView) {
+
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            cvArticle.setOnClickListener((view) -> {
+                openArticle();
+            });
+        }
+
+        public void setArticle(Article article) {
+
+            this.article = article;
+        }
+
+        public void openArticle() {
+
+            Context context = cvArticle.getContext();
+
+            Intent intent = new Intent(context, ArticleActivity.class);
+            intent.putExtra(KEY_URL, article.url);
+
+            context.startActivity(intent);
+        }
+
+        public void configure() {
+
+            tvPublicationDate.setText(article.publicationDate);
+            tvTitle.setText(article.headline);
+            tvSection.setText(article.section);
+            tvSnippet.setText(article.snippet);
         }
     }
 }

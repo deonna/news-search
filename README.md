@@ -28,7 +28,7 @@ The following **optional** features are implemented:
 The following **bonus** features are implemented:
 
 * [x] Use the [RecyclerView](http://guides.codepath.com/android/Using-the-RecyclerView) with the `StaggeredGridLayoutManager` to display improve the grid of image results
-* [ ] For different news articles that only have text or only have images, use [Heterogenous Layouts](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) with RecyclerView
+* [x] For different news articles that only have text or only have images, use [Heterogenous Layouts](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) with RecyclerView
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.com/android/Using-Parceler).
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [ ] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
@@ -44,15 +44,16 @@ The following **additional** features are implemented:
 * [ ] Added bookmarking and ability to view bookmarked articles
 * [ ] Added ability to persist bookmarks when app is opened again
 * [ ] Used BuildConfig to store API key
-* [ ] Used Snackbar to provide user feedback
+* [ ] Used Snackbar to provide user feedback upon loading
 * [ ] Better request handling: prevented the state in which a request is made with both a query
 and a news desk value (the Article Search API returns nothing if both are added to the request)
 * [ ] Added top news for the day upon load
 * [ ] Added NavigationDrawer to hold various news options
 * [ ] Added RequestInterceptor to automatically add API key to every request
-* [ ] Added GSON for every part of the Article Search API (Article class is a wrapper for the
+* [x] Added GSON for every part of the Article Search API (Article class is a wrapper for the
 relevant information, but each part of the API has a corresponding Retrofit class)
 * [ ] Added custom fonts to assets/ for better UI
+* [ ] Used Butterknife for view binding
 
 ## Video Walkthrough
 
