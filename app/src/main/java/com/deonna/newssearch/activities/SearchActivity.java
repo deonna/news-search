@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.fragments.FilterFragment;
-import com.deonna.newssearch.listeners.ArticleQueryListener;
+import com.deonna.newssearch.listeners.ArticleQueryHandler;
 import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
@@ -55,7 +55,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         initializeArticleList();
 
         svArticle.setQueryHint(QUERY_HINT);
-        ArticleQueryListener articleQueryListener = new ArticleQueryListener(svArticle, articleLoader);
+
+        ArticleQueryHandler articleQueryHandler = new ArticleQueryHandler(svArticle, articleLoader);
 
         ivFilter.setOnClickListener((view) -> {
             openFilterDialog();
@@ -78,6 +79,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
         articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
+
+        articleLoader.loadArticles(null);
     }
 
     public void openFilterDialog() {
@@ -150,7 +153,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 //        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 //        searchView.setQueryHint(QUERY_HINT);
 //
-//        articleQueryListener = new ArticleQueryListener(searchView, articleLoader);
+//        articleQueryListener = new ArticleQueryHandler(searchView, articleLoader);
 //
 //        return super.onCreateOptionsMenu(menu);
 //    }

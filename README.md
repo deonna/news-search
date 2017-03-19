@@ -2,7 +2,7 @@
 
 **News Search** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
 
-Time spent: **18** hours spent in total
+Time spent: **22** hours spent in total
 
 ## User Stories
 
@@ -41,22 +41,20 @@ cleanup event handling blocks.
 
 The following **additional** features are implemented:
 
-* [ ] Added bookmarking and ability to view bookmarked articles
-* [ ] Added ability to persist bookmarks when app is opened again
-* [ ] Used BuildConfig to store API key
-* [ ] Used Snackbar to provide user feedback upon loading
-* [x] Better request handling: prevented the state in which a request is made with both a query
-and a news desk value (the Article Search API returns nothing if both are added to the request)
-* [ ] Added top news for the day upon load
-* [ ] Added NavigationDrawer to hold various news options
+* [x] Added CardView for each article
+* [x] Better request handling: prevented the state in which a request is made with both a query and a news desk value (the Article Search API returns nothing if both are added to the request)
 * [x] Added RequestInterceptor to automatically add API key to every request
-* [x] Added GSON for every part of the Article Search API (Article class is a wrapper for the
-relevant information, but each part of the API has a corresponding Retrofit class)
-* [ ] Added custom fonts to for better UI
+* [x] Added GSON for every part of the Article Search API (Article class is a wrapper for the relevant information, but each part of the API has a corresponding Retrofit class)
 * [x] Used Butterknife for view binding
+* [x] Added top news for the day upon load for better UX
 * [ ] Added ProgressBar to indicate to the user that the app is loading a new article list for
 better UX
-* [ ] Added CardView for each article
+* [ ] Used BuildConfig to store API key instead of storing in GitHub for good best practices
+* [ ] Added bookmarking and ability to view bookmarked articles
+* [ ] Used Snackbar to provide user feedback upon loading during endless scroll for better UX
+* [ ] Added custom fonts to for better UI
+* [ ] Added ability to persist bookmarks when app is reopened again
+* [ ] Added NavigationDrawer to hold various news options
 
 ## Video Walkthrough
 
