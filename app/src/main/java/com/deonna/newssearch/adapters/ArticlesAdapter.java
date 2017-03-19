@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ArticleActivity;
 import com.deonna.newssearch.models.Article;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,10 +54,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ((ArticlesViewHolder) holder).setArticle(article);
 
         (((ArticlesViewHolder) holder).ivThumbnail).setImageResource(0);
-        Picasso
+        Glide
                 .with(context)
                 .load(article.thumbnail)
-                .resize(RESIZE_VALUE, RESIZE_VALUE)
+                .override(RESIZE_VALUE, RESIZE_VALUE)
                 .placeholder(R.drawable.thumbnail_placeholder)
                 .into(((ArticlesViewHolder) holder).ivThumbnail);
 

@@ -111,6 +111,8 @@ public class ArticleLoader {
 
     public void loadArticles(String newQuery) {
 
+        newsDeskFilter = null;
+
         loadArticles(newQuery, sortOrder, beginDate, newsDeskFilter, page);
     }
 
