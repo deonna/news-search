@@ -31,7 +31,7 @@ The following **bonus** features are implemented:
 * [x] For different news articles that only have text or only have images, use [Heterogenous Layouts](http://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView) with RecyclerView
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.com/android/Using-Parceler).
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
-* [ ] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
+* [x] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
 * [x] Replace Picasso with [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
 * [x] Uses [retrolambda expressions](http://guides.codepath.com/android/Lambda-Expressions) to
 cleanup event handling blocks.
@@ -50,12 +50,13 @@ The following **additional** features are implemented:
 * [x] Added ProgressBar to indicate to the user that the app is loading a new article list for
 better UX
 * [x] Used BuildConfig to store API key instead of storing in GitHub for good best practices
-* [x] Used Snackbar to provide user feedback upon loading during endless scroll for better UX
+* [x] Added Snackbar to provide user feedback upon loading during endless scroll for better UX
 * [ ] Added custom fonts to for better UI
-* [ ] Added bookmarking and ability to view bookmarked articles
 * [ ] Added pull to refresh for reloading article query
+* [ ] Added bookmarking and ability to view bookmarked articles
 * [ ] Added ability to persist bookmarks when app is reopened again
 * [ ] Added NavigationDrawer to hold various news options
+* [ ] Added splash screen
 
 ## Video Walkthrough
 

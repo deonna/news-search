@@ -100,8 +100,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Glide
                 .with(context)
                 .load(article.thumbnail)
-                .override(RESIZE_VALUE, RESIZE_VALUE)
-                .placeholder(R.drawable.thumbnail_placeholder)
+                .placeholder(R.drawable.ic_vector_image_placeholder)
                 .into(holder.ivThumbnail);
     }
 
