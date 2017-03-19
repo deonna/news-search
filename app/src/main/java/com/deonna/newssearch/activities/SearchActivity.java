@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,6 +20,7 @@ import com.deonna.newssearch.fragments.FilterFragment;
 import com.deonna.newssearch.listeners.ArticleQueryHandler;
 import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.listeners.ProgressBarListener;
+import com.deonna.newssearch.listeners.RefreshListener;
 import com.deonna.newssearch.listeners.ScrollToTopListener;
 import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
@@ -32,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity implements ArticlesFilterListener,
-        ProgressBarListener, ScrollToTopListener, SnackbarListener {
+        ProgressBarListener, ScrollToTopListener, SnackbarListener, RefreshListener {
 
     private static final int NUM_COLUMNS = 2;
     private static final String QUERY_HINT = "Enter a search query...";
@@ -42,6 +44,9 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     @BindView(R.id.pbArticlesLoading) ProgressBar pbArticlesLoading;
 
     @BindView(R.id.tbArticles) Toolbar tbArticles;
+
+    @BindView(R.id.srlArticles) SwipeRefreshLayout srlArticles;
+
     @BindView(R.id.rvArticles) RecyclerView rvArticles;
 
     @BindView(R.id.svArticle) SearchView svArticle;
@@ -73,7 +78,6 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         ivFilter.setOnClickListener((view) -> {
             openFilterDialog();
         });
-//        initializeSidebar();
     }
 
     private void initializeArticleList() {
@@ -90,8 +94,16 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setLayoutManager(layoutManager);
 
         articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
-                SearchActivity.this, SearchActivity.this, SearchActivity.this);
+                SearchActivity.this, SearchActivity.this, SearchActivity.this, SearchActivity.this);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
+
+        srlArticles.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                articleLoader.refreshArticles();
+            }
+        });
 
         articleLoader.loadArticles(null);
     }
@@ -151,6 +163,12 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     public void showSnackbar() {
 
         Snackbar.make(dlArticles, R.string.loading, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void finishRefreshing() {
+
+        srlArticles.setRefreshing(false);
     }
 
 //    private ActionBarDrawerToggle drawerToggle;

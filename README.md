@@ -51,11 +51,10 @@ The following **additional** features are implemented:
 better UX
 * [x] Used BuildConfig to store API key instead of storing in GitHub for good best practices
 * [x] Added Snackbar to provide user feedback upon loading during endless scroll for better UX
+* [x] Added swipe to refresh for reloading article query
 * [ ] Added custom fonts to for better UI
-* [ ] Added pull to refresh for reloading article query
 * [ ] Added bookmarking and ability to view bookmarked articles
 * [ ] Added ability to persist bookmarks when app is reopened again
-* [ ] Added NavigationDrawer to hold various news options
 * [ ] Added splash screen
 
 ## Video Walkthrough

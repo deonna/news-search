@@ -5,6 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.deonna.newssearch.adapters.ArticlesAdapter;
 import com.deonna.newssearch.listeners.ProgressBarListener;
+import com.deonna.newssearch.listeners.RefreshListener;
 import com.deonna.newssearch.listeners.ScrollToTopListener;
 import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
@@ -34,6 +35,7 @@ public class ArticleLoader {
     private ProgressBarListener progressBarListener;
     private ScrollToTopListener scrollToTopListener;
     private SnackbarListener snackbarListener;
+    private RefreshListener refreshListener;
 
     //Current filters
     public String query = null;
@@ -42,12 +44,16 @@ public class ArticleLoader {
     private String newsDeskFilter = null;
     private String page = null;
 
+    private boolean isRefreshing = false;
+
     public ArticleLoader(List<Article> articles,
                          ArticlesAdapter articlesAdapter,
                          StaggeredGridLayoutManager layoutManager,
                          ProgressBarListener progressBarListener,
                          ScrollToTopListener scrollToTopListener,
-                         SnackbarListener snackbarListener) {
+                         SnackbarListener snackbarListener,
+                         RefreshListener refreshListener
+    ) {
 
         client = new NewYorkTimesClient();
 
@@ -58,6 +64,7 @@ public class ArticleLoader {
         this.progressBarListener = progressBarListener;
         this.scrollToTopListener = scrollToTopListener;
         this.snackbarListener = snackbarListener;
+        this.refreshListener = refreshListener;
     }
 
     private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
@@ -77,7 +84,9 @@ public class ArticleLoader {
            query = null;
        }
 
-       snackbarListener.showSnackbar();
+       if (!isRefreshing) {
+           snackbarListener.showSnackbar();
+       }
 
        client.getArticlesByPage(
                query,
@@ -132,6 +141,16 @@ public class ArticleLoader {
         loadArticles(newQuery, sortOrder, beginDate, newsDeskFilter, page);
     }
 
+    public void refreshArticles() {
+
+        if (query != null) {
+            newsDeskFilter = null;
+        }
+
+        isRefreshing = true;
+        loadArticles(query, sortOrder, beginDate, newsDeskFilter, page);
+    }
+
     public void loadArticles(
             String query,
             String sortOrder,
@@ -141,7 +160,9 @@ public class ArticleLoader {
 
         resetArticleState();
 
-        progressBarListener.showProgressBar();
+        if (!isRefreshing) {
+            progressBarListener.showProgressBar();
+        }
 
         this.query = query;
         this.sortOrder = sortOrder;
@@ -159,7 +180,7 @@ public class ArticleLoader {
                     @Override
                     public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
 
-                        if (response.isSuccessful()) {
+                        if (response.isSuccerssful()) {
                             QueryResponse queryResponse = response.body();
 
                             articles.addAll(Article.fromQueryResponse(queryResponse));
@@ -168,6 +189,11 @@ public class ArticleLoader {
 
                             progressBarListener.hideProgressBar();
                             scrollToTopListener.scrollToTop();
+
+                            if (isRefreshing) {
+                                refreshListener.finishRefreshing();
+                                isRefreshing = false;
+                            }
                         }
                     }
 

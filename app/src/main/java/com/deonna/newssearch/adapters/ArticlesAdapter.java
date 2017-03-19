@@ -100,6 +100,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Glide
                 .with(context)
                 .load(article.thumbnail)
+                .override(RESIZE_VALUE, RESIZE_VALUE)
                 .placeholder(R.drawable.ic_vector_image_placeholder)
                 .into(holder.ivThumbnail);
     }
@@ -108,6 +109,19 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
 
         return articles.size();
+    }
+
+    public void clear() {
+
+        articles.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<Article> list) {
+
+        articles.addAll(list);
+        notifyDataSetChanged();
     }
 
     public static class ArticlesViewHolder extends ArticlesNoImageViewHolder {
