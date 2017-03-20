@@ -180,7 +180,7 @@ public class ArticleLoader {
                     @Override
                     public void onResponse(Call<QueryResponse> call, Response<QueryResponse> response) {
 
-                        if (response.isSuccerssful()) {
+                        if (response.isSuccessful()) {
                             QueryResponse queryResponse = response.body();
 
                             articles.addAll(Article.fromQueryResponse(queryResponse));
