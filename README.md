@@ -61,9 +61,10 @@ better UX
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/a9qEO7U.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/KyF4J94.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 [NewsSearch Demo #2](http://i.imgur.com/tuonCqz.gif)
+
 [NewsSearch Demo #1](http://i.imgur.com/807o4J5.gif)
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
