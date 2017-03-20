@@ -2,8 +2,10 @@ package com.deonna.newssearch.utilities;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 import com.deonna.newssearch.adapters.ArticlesAdapter;
+import com.deonna.newssearch.listeners.EmptyViewListener;
 import com.deonna.newssearch.listeners.ProgressBarListener;
 import com.deonna.newssearch.listeners.RefreshListener;
 import com.deonna.newssearch.listeners.ScrollToTopListener;
@@ -36,6 +38,7 @@ public class ArticleLoader {
     private ScrollToTopListener scrollToTopListener;
     private SnackbarListener snackbarListener;
     private RefreshListener refreshListener;
+    private EmptyViewListener emptyViewListener;
 
     //Current filters
     public String query = null;
@@ -52,7 +55,8 @@ public class ArticleLoader {
                          ProgressBarListener progressBarListener,
                          ScrollToTopListener scrollToTopListener,
                          SnackbarListener snackbarListener,
-                         RefreshListener refreshListener
+                         RefreshListener refreshListener,
+                         EmptyViewListener emptyViewListener
     ) {
 
         client = new NewYorkTimesClient();
@@ -111,6 +115,9 @@ public class ArticleLoader {
                 @Override
                 public void onFailure(Call<QueryResponse> call, Throwable t) {
 
+                    emptyViewListener.showEmptyView();
+                    Log.e(TAG, "Error loading articles!");
+                    t.printStackTrace();
                 }
         });
 
@@ -200,6 +207,9 @@ public class ArticleLoader {
                     @Override
                     public void onFailure(Call<QueryResponse> call, Throwable t) {
 
+                        emptyViewListener.showEmptyView();
+                        Log.e(TAG, "Error loading articles!");
+                        t.printStackTrace();
                     }
                 }
         );

@@ -99,7 +99,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setLayoutManager(layoutManager);
 
         articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
-                SearchActivity.this, SearchActivity.this, SearchActivity.this, SearchActivity.this);
+                SearchActivity.this, SearchActivity.this, SearchActivity.this, SearchActivity
+                .this, SearchActivity.this);
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
 
         srlArticles.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
