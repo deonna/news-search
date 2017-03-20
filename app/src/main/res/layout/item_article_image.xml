@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvSection"
-                android:text="@{article.formattedPublicationDate}"
+                android:text="@{article.publicationDate}"
                 tools:text="12/22/2017"/>
 
             <TextView
