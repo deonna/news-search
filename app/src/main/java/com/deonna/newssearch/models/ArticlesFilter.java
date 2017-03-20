@@ -102,16 +102,20 @@ public class ArticlesFilter implements Parcelable {
 
             if (isSelected) {
 
+                final String NEWS_DESK_PREFIX_FORMAT = "news_desk:(\"%s\"";
+                final String NEWS_DESK_TOPIC_FORMAT = "%s%%20\"%s\"";
+
                 if (newsDeskFilter == null) {
-                    newsDeskFilter = String.format("news_desk:(\"%s\"", topic);
+                    newsDeskFilter = String.format(NEWS_DESK_PREFIX_FORMAT, topic);
                 } else {
-                    newsDeskFilter = String.format("%s%%20\"%s\"", newsDeskFilter, topic);
+                    newsDeskFilter = String.format(NEWS_DESK_TOPIC_FORMAT, newsDeskFilter, topic);
                 }
             }
         }
 
         if (newsDeskFilter != null) {
-            newsDeskFilter = String.format("%s)", newsDeskFilter);
+            final String NEWS_DESK_SUFFIX_FORMAT = "%s)";
+            newsDeskFilter = String.format(NEWS_DESK_SUFFIX_FORMAT, newsDeskFilter);
         }
 
         return newsDeskFilter;
