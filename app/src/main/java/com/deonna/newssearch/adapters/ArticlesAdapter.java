@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ChromeArticleActivity;
-import com.deonna.newssearch.databinding.ItemArticleBinding;
+import com.deonna.newssearch.databinding.ItemArticleImageBinding;
 import com.deonna.newssearch.databinding.ItemArticleNoImageBinding;
 import com.deonna.newssearch.models.Article;
 
@@ -41,9 +41,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (viewType) {
             case ARTICLE_IMAGE:
-                ItemArticleBinding articleViewDataBinding = DataBindingUtil.inflate(LayoutInflater
+                ItemArticleImageBinding articleViewDataBinding = DataBindingUtil.inflate(LayoutInflater
                         .from(parent.getContext
-                                ()), R.layout.item_article, parent, false);
+                                ()), R.layout.item_article_image, parent, false);
                 viewHolder = new ArticlesViewHolder(articleViewDataBinding);
                 break;
             case ARTICLE_NO_IMAGE:
@@ -122,9 +122,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class ArticlesViewHolder extends RecyclerView.ViewHolder {
 
-        final ItemArticleBinding binding;
+        final ItemArticleImageBinding binding;
 
-        public ArticlesViewHolder(ItemArticleBinding itemView) {
+        public ArticlesViewHolder(ItemArticleImageBinding itemView) {
 
             super(itemView.getRoot());
 
