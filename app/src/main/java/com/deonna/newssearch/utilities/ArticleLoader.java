@@ -178,7 +178,7 @@ public class ArticleLoader {
         }
 
         this.query = query;
-        this.sortOrder = sortOrder;
+        this.sortOrder = sortOrder == null ? KEY_NEWEST : sortOrder ;
         this.beginDate = beginDate;
         this.newsDeskFilter = newsDeskFilter;
         this.page = page;

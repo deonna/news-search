@@ -24,6 +24,7 @@ public class Article {
     public String snippet;
     public String publicationDate;
     public String formattedPublicationDate;
+    public int imageHeightToWidthRatio;
 
     public Article(Doc doc) {
 
@@ -43,6 +44,7 @@ public class Article {
 
                  if (m.width > greatestWidth) {
                      bestImagePath = m.url;
+                     imageHeightToWidthRatio = m.height / m.width;
                  }
             }
 

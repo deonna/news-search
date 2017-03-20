@@ -120,6 +120,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+
     private void loadImage(Article article, ImageView ivThumbnail) {
 
         ivThumbnail.setImageResource(0);
@@ -127,7 +128,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Glide
                 .with(context)
                 .load(article.thumbnail)
-                .override(RESIZE_VALUE, RESIZE_VALUE)
                 .placeholder(R.drawable.ic_vector_image_placeholder)
                 .into(ivThumbnail);
     }
