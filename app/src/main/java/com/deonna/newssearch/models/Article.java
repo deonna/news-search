@@ -14,7 +14,7 @@ import java.util.Locale;
 public class Article {
 
     public static final String URL_PREFIX = "http://www.nytimes.com/%s";
-    public static final String DATE_FORMAT_TO_PARSE = "yyyy-MM-dd'T'hh:mm:ssZ" ;
+    public static final String DATE_FORMAT_TO_PARSE = "yyyy-MM-dd'T'" ;
     public static final String DESIRED_DATE_FORMAT = "M/dd/yyyy";
 
     public String url;
