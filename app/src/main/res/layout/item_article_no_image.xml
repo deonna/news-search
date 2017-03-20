@@ -20,7 +20,10 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/card_margin">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -50,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvSection"
                 android:text="@{article.formattedPublicationDate}"
+                android:textSize="12sp"
                 tools:text="12/22/2017"/>
 
             <TextView
@@ -58,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvPublicationDate"
                 android:text="@{article.snippet}"
+                android:textSize="10sp"
                 tools:text="The correspondent Gillian Findlay investigates the scientific claims about fish oil, a popular supplement, in an exclusive video by the PBS series “Frontline” in collaboration with The New York Times...."/>
 
         </RelativeLayout>

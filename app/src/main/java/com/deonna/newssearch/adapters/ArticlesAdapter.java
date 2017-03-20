@@ -151,6 +151,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             binding.cvArticle.setOnClickListener(v -> {
                 openArticle();
             });
+
+            binding.tvPublicationDate.setTypeface(Fonts.fontRegular);
+            binding.tvTitle.setTypeface(Fonts.fontBold);
+            //binding.tvSnippet.setTypeface(Fonts.fontLight);
         }
 
         public void openArticle() {
@@ -180,7 +184,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             binding.tvPublicationDate.setTypeface(Fonts.fontRegular);
             binding.tvTitle.setTypeface(Fonts.fontBold);
-            binding.tvSnippet.setTypeface(Fonts.fontLight);
         }
 
         public void openArticle() {
