@@ -53,8 +53,6 @@ better UX
 * [x] Added Snackbar to provide user feedback upon loading during endless scroll for better UX
 * [x] Added swipe to refresh for reloading article query
 * [ ] Added custom fonts to for better UI
-* [ ] Added bookmarking and ability to view bookmarked articles
-* [ ] Added ability to persist bookmarks when app is reopened again
 * [ ] Added splash screen
 
 ## Video Walkthrough
