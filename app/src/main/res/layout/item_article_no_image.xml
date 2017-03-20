@@ -13,14 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         card_view:cardUseCompatPadding="true"
-        card_view:cardBackgroundColor="@color/colorCardView"
+        card_view:cardBackgroundColor="@android:color/white"
         card_view:cardElevation="@dimen/main_card_elevation">
 
         <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp">
+            android:layout_margin="@dimen/card_margin">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -36,9 +36,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvTitle"
                 android:background="@color/colorSectionBackground"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:padding="4dp"
+                android:layout_marginTop="@dimen/section_margin"
+                android:layout_marginBottom="@dimen/section_margin"
+                android:padding="@dimen/section_padding"
                 android:textColor="@android:color/white"
                 android:textAllCaps="true"
                 android:text="@{article.section}"

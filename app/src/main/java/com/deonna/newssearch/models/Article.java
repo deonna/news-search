@@ -1,6 +1,7 @@
 package com.deonna.newssearch.models;
 
 import com.deonna.newssearch.models.articlesearch.Doc;
+import com.deonna.newssearch.models.articlesearch.Multimedium;
 import com.deonna.newssearch.models.articlesearch.QueryResponse;
 
 import java.text.ParseException;
@@ -13,6 +14,7 @@ import java.util.Locale;
 public class Article {
 
     public static final String URL_PREFIX = "http://www.nytimes.com/%s";
+    public static final String MAX_WIDTH = "600";
 
     public String url;
     public String thumbnail;
@@ -32,9 +34,18 @@ public class Article {
         formattedPublicationDate = getFormattedPublicationDate(publicationDate);
 
         if (!doc.multimedia.isEmpty()) {
-            //thumbnail = "http://www.nytimes.com/" + doc.multimedia.get(0).url;
 
-            thumbnail = String.format(Locale.US, URL_PREFIX, doc.multimedia.get(0).url);
+            int greatestWidth = Integer.MIN_VALUE;
+            String bestImagePath = doc.multimedia.get(0).url;
+
+            for (Multimedium m : doc.multimedia) {
+
+                 if (m.width > greatestWidth) {
+                     bestImagePath = m.url;
+                 }
+            }
+
+            thumbnail = String.format(Locale.US, URL_PREFIX, bestImagePath);
         }
     }
 
@@ -46,7 +57,7 @@ public class Article {
                 Date date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(dateToParse);
                 return new SimpleDateFormat("M/dd/yyyy").format(date);
             } else {
-                return null;
+                return "";
             }
         } catch (ParseException e) {
             e.printStackTrace();

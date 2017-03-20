@@ -18,10 +18,10 @@
             android:id="@+id/ivFilter"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
-            android:paddingLeft="12dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/leftmost_vector_padding"
+            android:paddingRight="@dimen/filter_padding"
+            android:paddingTop="@dimen/filter_padding"
+            android:paddingBottom="@dimen/filter_padding"
             android:background="@color/colorPrimary"
             android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_vector_filter"/>
@@ -69,8 +69,8 @@
             <ProgressBar
                 android:id="@+id/pbArticlesLoading"
                 android:visibility="gone"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 

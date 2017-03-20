@@ -30,7 +30,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="@dimen/sort_order_top_margin">
 
             <Spinner
                 android:id="@+id/spSortOrder"
@@ -43,11 +43,11 @@
 
 
             <RelativeLayout
-                android:id="@+id/llSections"
+                android:id="@+id/rlSections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/spSortOrder"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/sections_top_margin"
                 android:gravity="center">
 
                 <CheckBox
