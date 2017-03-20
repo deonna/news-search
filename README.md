@@ -67,12 +67,27 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Endless scroll was painful.
+- Endless scrolling was painful when introducing pagination. It wasn’t clear to me at the beginning that I needed to create an instance variable to track the pagination, because I thought I could rely on the ‘page’ parameter passed into the onLoadMore() callback function to increment with each load/call.
+
+- I would like to experiment with an alternate architecture (as opposed to MVC). When working on the data binding part of the spec, it was painful to introduce binding to the majority of the codebase (exception: my ArticlesAdapter), because it wasn’t organized using MVVM.
+
+- In general, I had some fairly ambitious ideas for how I wanted to design the UX of the application, and ended up having to do away with the more time-consuming ones as the deadline approached.
+
+- Monitoring the network and using network state to provide feedback to the user about whether or not the app could retrieve articles was easy. The APIs that Android provides for developers to interact with networking concerns is simple to follow.
+
+- I had to deal with a lot of Gradle bugs, and ended up downgrading from 2.3 -> 2.2.3 as a
+solution.
+
+- Retrofit combined with OkHttp: where have you been all my life? The unobtrusive way Retrofit handles optional query params saved me a lot of pain (I imagined I’d have to write tons of methods to make my GET requests vs being able to use just one).
 
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- Glide
+- Butterknife
+- OkHttp
+- Retrofit
 
 ## License
 
