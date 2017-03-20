@@ -17,6 +17,8 @@ import com.deonna.newssearch.listeners.ArticlesFilterListener;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -71,6 +73,21 @@ public class FilterFragment extends DialogFragment {
         btnApply.setOnClickListener((view) -> {
             saveFilterChanges();
         });
+
+        if (articlesFilter.beginDate != null) {
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(articlesFilter.beginDate);
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            dpBeginDate.updateDate(
+                year,
+                month,
+                day
+            );
+        }
 
         return fragmentView;
     }

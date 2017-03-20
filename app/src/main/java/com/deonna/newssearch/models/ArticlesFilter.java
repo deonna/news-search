@@ -26,7 +26,7 @@ public class ArticlesFilter implements Parcelable {
 
     public ArticlesFilter() {
 
-        beginDate = Calendar.getInstance().getTime();
+        beginDate = new Date();
         sortOrder = SORT_NEWEST;
         topics = new HashMap<>();
     }
