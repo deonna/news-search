@@ -52,7 +52,7 @@ The following **additional** features are implemented:
 better UX
 * [x] Used BuildConfig to store API key instead of storing in GitHub for good best practices
 * [x] Added Snackbar to provide user feedback upon loading during endless scroll for better UX
-* [x] Added an empty view to display when the articles list is empty/no articles are ound for
+* [x] Added an empty view to display when the articles list is empty/no articles are found or when the network is down for
 better UX
 * [x] Added swipe to refresh for reloading article query
 * [x] Used BroadcastReceiver to monitor network connectivity
