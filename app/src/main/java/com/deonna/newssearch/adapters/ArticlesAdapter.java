@@ -2,30 +2,27 @@ package com.deonna.newssearch.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ChromeArticleActivity;
+import com.deonna.newssearch.databinding.ItemArticleBinding;
+import com.deonna.newssearch.databinding.ItemArticleNoImageBinding;
 import com.deonna.newssearch.models.Article;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String KEY_URL = "url";
     private static final int RESIZE_VALUE = 200;
 
-    private static final int ARTICLE_DEFAULT = 0;
+    private static final int ARTICLE_IMAGE = 0;
     private static final int ARTICLE_NO_IMAGE = 1;
 
     private Context context;
@@ -41,20 +38,26 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         RecyclerView.ViewHolder viewHolder;
-        LayoutInflater inflater = LayoutInflater.from(context);
 
         switch (viewType) {
-            case ARTICLE_DEFAULT:
-                View defaultView = inflater.inflate(R.layout.item_article, parent, false);
-                viewHolder = new ArticlesViewHolder(defaultView);
+            case ARTICLE_IMAGE:
+                ItemArticleBinding articleViewDataBinding = DataBindingUtil.inflate(LayoutInflater
+                        .from(parent.getContext
+                                ()), R.layout.item_article, parent, false);
+                viewHolder = new ArticlesViewHolder(articleViewDataBinding);
                 break;
             case ARTICLE_NO_IMAGE:
-                View noImageView = inflater.inflate(R.layout.item_article_no_image, parent, false);
-                viewHolder = new ArticlesNoImageViewHolder(noImageView);
+                ItemArticleNoImageBinding noImageViewDataBinding = DataBindingUtil.inflate(LayoutInflater
+                        .from(parent.getContext
+                                ()), R.layout.item_article_no_image, parent, false);
+                viewHolder = new ArticlesNoImageViewHolder(noImageViewDataBinding);
                 break;
             default:
-                View view = inflater.inflate(R.layout.item_article, parent, false);
-                viewHolder = new ArticlesViewHolder(view);
+                ItemArticleNoImageBinding defaultViewDataBinding = DataBindingUtil.inflate
+                        (LayoutInflater
+                        .from(parent.getContext
+                                ()), R.layout.item_article_no_image, parent, false);
+                viewHolder = new ArticlesNoImageViewHolder(defaultViewDataBinding);
                 break;
         }
 
@@ -70,7 +73,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (article.thumbnail == null) {
             return ARTICLE_NO_IMAGE;
         } {
-            return ARTICLE_DEFAULT;
+            return ARTICLE_IMAGE;
         }
     }
 
@@ -79,30 +82,36 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         Article article = articles.get(position);
 
-        ArticlesNoImageViewHolder articlesHolder = (ArticlesNoImageViewHolder) holder;
-        articlesHolder.setArticle(article);
-        articlesHolder.configure();
-
         switch(holder.getItemViewType()) {
 
-            case ARTICLE_DEFAULT:
-                loadImage(article, (ArticlesViewHolder) articlesHolder);
+            case ARTICLE_IMAGE:
+                ArticlesViewHolder articlesHolder = (ArticlesViewHolder) holder;
+                articlesHolder.binding.setArticle(article);
+                articlesHolder.binding.executePendingBindings();
+                loadImage(article, articlesHolder.binding.ivThumbnail);
                 break;
+            case ARTICLE_NO_IMAGE:
+                ArticlesNoImageViewHolder noImageHolder = (ArticlesNoImageViewHolder) holder;
+                noImageHolder.binding.setArticle(article);
+                noImageHolder.binding.executePendingBindings();
             default:
+                ArticlesNoImageViewHolder defaultHolder = (ArticlesNoImageViewHolder) holder;
+                defaultHolder.binding.setArticle(article);
+                defaultHolder.binding.executePendingBindings();
                 break;
         }
     }
 
-    private void loadImage(Article article, ArticlesViewHolder holder) {
+    private void loadImage(Article article, ImageView ivThumbnail) {
 
-        holder.ivThumbnail.setImageResource(0);
+        ivThumbnail.setImageResource(0);
 
         Glide
                 .with(context)
                 .load(article.thumbnail)
                 .override(RESIZE_VALUE, RESIZE_VALUE)
                 .placeholder(R.drawable.ic_vector_image_placeholder)
-                .into(holder.ivThumbnail);
+                .into(ivThumbnail);
     }
 
     @Override
@@ -111,70 +120,55 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return articles.size();
     }
 
-    public void clear() {
+    public static class ArticlesViewHolder extends RecyclerView.ViewHolder {
 
-        articles.clear();
-        notifyDataSetChanged();
-    }
+        final ItemArticleBinding binding;
 
-    // Add a list of items
-    public void addAll(List<Article> list) {
+        public ArticlesViewHolder(ItemArticleBinding itemView) {
 
-        articles.addAll(list);
-        notifyDataSetChanged();
-    }
+            super(itemView.getRoot());
 
-    public static class ArticlesViewHolder extends ArticlesNoImageViewHolder {
+            binding = itemView;
 
-        @BindView(R.id.ivThumbnail) ImageView ivThumbnail;
+            binding.cvArticle.setOnClickListener(v -> {
+                openArticle();
+            });
+        }
 
-        public ArticlesViewHolder(View itemView) {
+        public void openArticle() {
 
-            super(itemView);
+            Context context = binding.cvArticle.getContext();
+
+            Intent intent = new Intent(context, ChromeArticleActivity.class);
+            intent.putExtra(KEY_URL, binding.getArticle().url);
+
+            context.startActivity(intent);
         }
     }
 
     public static class ArticlesNoImageViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.cvArticle) CardView cvArticle;
-        @BindView(R.id.tvPublicationDate) TextView tvPublicationDate;
-        @BindView(R.id.tvTitle) TextView tvTitle;
-        @BindView(R.id.tvSection) TextView tvSection;
-        @BindView(R.id.tvSnippet) TextView tvSnippet;
+        final ItemArticleNoImageBinding binding;
 
-        private Article article;
+        public ArticlesNoImageViewHolder(ItemArticleNoImageBinding itemView) {
 
-        public ArticlesNoImageViewHolder(View itemView) {
+            super(itemView.getRoot());
 
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+            binding = itemView;
 
-            cvArticle.setOnClickListener((view) -> {
+            binding.cvArticle.setOnClickListener(v -> {
                 openArticle();
             });
         }
 
-        public void setArticle(Article article) {
-
-            this.article = article;
-        }
-
         public void openArticle() {
 
-            Context context = cvArticle.getContext();
+            Context context = binding.cvArticle.getContext();
 
             Intent intent = new Intent(context, ChromeArticleActivity.class);
-            intent.putExtra(KEY_URL, article.url);
+            intent.putExtra(KEY_URL, binding.getArticle().url);
 
             context.startActivity(intent);
-        }
-
-        public void configure() {
-
-            tvPublicationDate.setText(article.publicationDate);
-            tvTitle.setText(article.headline);
-            tvSection.setText(article.section);
-            tvSnippet.setText(article.snippet);
         }
     }
 }

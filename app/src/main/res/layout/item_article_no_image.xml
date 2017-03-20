@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cvArticle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@color/colorCardView"
-    card_view:cardElevation="@dimen/main_card_elevation">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+    <data>
+        <variable name="article" type="com.deonna.newssearch.models.Article"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvArticle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp">
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/colorCardView"
+        card_view:cardElevation="@dimen/main_card_elevation">
 
-        <TextView
-            android:id="@+id/tvPublicationDate"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivThumbnail"
-            tools:text="12/22/2017"/>
+            android:padding="4dp">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvPublicationDate"
-            android:textStyle="bold"
-            tools:text="The Latest: Google Says Android, Chrome Security Flaws Fixed"/>
+            <TextView
+                android:id="@+id/tvPublicationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivThumbnail"
+                android:text="@{article.publicationDate}"
+                tools:text="12/22/2017"/>
 
-        <TextView
-            android:id="@+id/tvSection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTitle"
-            android:background="@color/colorSectionBackground"
-            android:padding="4dp"
-            android:textColor="@android:color/white"
-            android:textAllCaps="true"
-            tools:text="Health"/>
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvPublicationDate"
+                android:textStyle="bold"
+                android:text="@{article.headline}"
+                tools:text="The Latest: Google Says Android, Chrome Security Flaws Fixed"/>
 
-        <TextView
-            android:id="@+id/tvSnippet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvSection"
-            tools:text="The correspondent Gillian Findlay investigates the scientific claims about fish oil, a popular supplement, in an exclusive video by the PBS series “Frontline” in collaboration with The New York Times...."/>
+            <TextView
+                android:id="@+id/tvSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvTitle"
+                android:background="@color/colorSectionBackground"
+                android:padding="4dp"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:text="@{article.section}"
+                tools:text="Health"/>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tvSnippet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSection"
+                android:text="@{article.snippet}"
+                tools:text="The correspondent Gillian Findlay investigates the scientific claims about fish oil, a popular supplement, in an exclusive video by the PBS series “Frontline” in collaboration with The New York Times...."/>
 
-</android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>
