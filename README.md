@@ -56,8 +56,7 @@ better UX
 better UX
 * [x] Added swipe to refresh for reloading article query
 * [x] Used BroadcastReceiver to monitor network connectivity
-* [ ] Added custom fonts to for better UI
-* [ ] Added splash screen
+* [x] Added custom fonts to for better UI
 
 ## Video Walkthrough
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,7 @@ import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
+import com.deonna.newssearch.utilities.Fonts;
 import com.deonna.newssearch.utilities.Utils;
 
 import java.util.ArrayList;
@@ -78,6 +80,7 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
         ButterKnife.bind(this);
 
+        setupFonts();
         setSupportActionBar(tbArticles);
 
         initializeArticleList();
@@ -91,6 +94,13 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         });
 
         monitorConnectivity();
+    }
+
+    private void setupFonts() {
+
+        Fonts.fontRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+        Fonts.fontLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
+        Fonts.fontBold = Typeface.createFromAsset(getAssets(), "OpenSans-Bold.ttf");
     }
 
     public void monitorConnectivity() {

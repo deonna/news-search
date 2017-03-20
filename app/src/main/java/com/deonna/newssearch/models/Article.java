@@ -39,10 +39,15 @@ public class Article {
     }
 
     public static String getFormattedPublicationDate(String dateToParse) {
-        Date date = null;
+
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(dateToParse);
-             return new SimpleDateFormat("M/dd/yyyy").format(date);
+
+            if (dateToParse != null) {
+                Date date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(dateToParse);
+                return new SimpleDateFormat("M/dd/yyyy").format(date);
+            } else {
+                return null;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

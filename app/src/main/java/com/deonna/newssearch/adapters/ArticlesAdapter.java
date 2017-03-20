@@ -15,13 +15,14 @@ import com.deonna.newssearch.databinding.ItemArticleImageBinding;
 import com.deonna.newssearch.databinding.ItemArticleNoImageBinding;
 import com.deonna.newssearch.listeners.EmptyViewListener;
 import com.deonna.newssearch.models.Article;
+import com.deonna.newssearch.utilities.Fonts;
 
 import java.util.List;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String KEY_URL = "url";
-    private static final int RESIZE_VALUE = 200;
+    private static final int RESIZE_VALUE = 400;
 
     private static final int ARTICLE_IMAGE = 0;
     private static final int ARTICLE_NO_IMAGE = 1;
@@ -176,6 +177,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             binding.cvArticle.setOnClickListener(v -> {
                 openArticle();
             });
+
+            binding.tvPublicationDate.setTypeface(Fonts.fontRegular);
+            binding.tvTitle.setTypeface(Fonts.fontBold);
+            binding.tvSnippet.setTypeface(Fonts.fontLight);
         }
 
         public void openArticle() {

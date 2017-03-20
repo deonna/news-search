@@ -23,18 +23,9 @@
             android:padding="4dp">
 
             <TextView
-                android:id="@+id/tvPublicationDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ivThumbnail"
-                android:text="@{article.formattedPublicationDate}"
-                tools:text="12/22/2017"/>
-
-            <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvPublicationDate"
                 android:textStyle="bold"
                 android:text="@{article.headline}"
                 tools:text="The Latest: Google Says Android, Chrome Security Flaws Fixed"/>
@@ -45,6 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvTitle"
                 android:background="@color/colorSectionBackground"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:padding="4dp"
                 android:textColor="@android:color/white"
                 android:textAllCaps="true"
@@ -52,10 +45,18 @@
                 tools:text="Health"/>
 
             <TextView
+                android:id="@+id/tvPublicationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvSection"
+                android:text="@{article.formattedPublicationDate}"
+                tools:text="12/22/2017"/>
+
+            <TextView
                 android:id="@+id/tvSnippet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvSection"
+                android:layout_below="@id/tvPublicationDate"
                 android:text="@{article.snippet}"
                 tools:text="The correspondent Gillian Findlay investigates the scientific claims about fish oil, a popular supplement, in an exclusive video by the PBS series “Frontline” in collaboration with The New York Times...."/>
 
