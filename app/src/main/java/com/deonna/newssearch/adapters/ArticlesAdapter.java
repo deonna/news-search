@@ -13,6 +13,7 @@ import com.deonna.newssearch.R;
 import com.deonna.newssearch.activities.ChromeArticleActivity;
 import com.deonna.newssearch.databinding.ItemArticleImageBinding;
 import com.deonna.newssearch.databinding.ItemArticleNoImageBinding;
+import com.deonna.newssearch.listeners.EmptyViewListener;
 import com.deonna.newssearch.models.Article;
 
 import java.util.List;
@@ -28,11 +29,27 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private List<Article> articles;
 
-    public ArticlesAdapter(Context context, List<Article> articles) {
+    private EmptyViewListener emptyViewListener;
+
+    public ArticlesAdapter(Context context, List<Article> articles, EmptyViewListener emptyViewListener) {
 
         this.context = context;
         this.articles = articles;
+
+        this.emptyViewListener = emptyViewListener;
     }
+
+    public void notifyAdapterDataSetChanged() {
+
+        super.notifyDataSetChanged();
+
+        if (articles.isEmpty()) {
+            this.emptyViewListener.showEmptyView();
+        } else {
+            this.emptyViewListener.showNormalView();
+        }
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

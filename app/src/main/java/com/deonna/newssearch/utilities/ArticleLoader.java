@@ -123,7 +123,7 @@ public class ArticleLoader {
         int oldCount = articlesAdapter.getItemCount();
         articlesAdapter.notifyItemRangeInserted(oldCount, newArraySize);
 
-        articlesAdapter.notifyDataSetChanged();
+        articlesAdapter.notifyAdapterDataSetChanged();
     }
 
     private void resetArticleState() {
@@ -131,7 +131,7 @@ public class ArticleLoader {
         currentPage = 0;
         scrollListener.resetState();
         articles.clear();
-        articlesAdapter.notifyDataSetChanged();
+        articlesAdapter.notifyAdapterDataSetChanged();
     }
 
     public void loadArticles(String newQuery) {
@@ -185,7 +185,7 @@ public class ArticleLoader {
 
                             articles.addAll(Article.fromQueryResponse(queryResponse));
 
-                            articlesAdapter.notifyDataSetChanged();
+                            articlesAdapter.notifyAdapterDataSetChanged();
 
                             progressBarListener.hideProgressBar();
                             scrollToTopListener.scrollToTop();
