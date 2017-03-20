@@ -1,5 +1,10 @@
 package com.deonna.newssearch.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +33,7 @@ import com.deonna.newssearch.listeners.SnackbarListener;
 import com.deonna.newssearch.models.Article;
 import com.deonna.newssearch.models.ArticlesFilter;
 import com.deonna.newssearch.utilities.ArticleLoader;
+import com.deonna.newssearch.utilities.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +89,25 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         ivFilter.setOnClickListener((view) -> {
             openFilterDialog();
         });
+
+        monitorConnectivity();
+    }
+
+    public void monitorConnectivity() {
+
+        BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if (!Utils.isNetworkAvailable(SearchActivity.this)) {
+                    showNetworkDisconnectedView();
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver, filter);
     }
 
     private void initializeArticleList() {
@@ -98,9 +123,8 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
         rvArticles.setAdapter(articlesAdapter);
         rvArticles.setLayoutManager(layoutManager);
 
-        articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager,
-                SearchActivity.this, SearchActivity.this, SearchActivity.this, SearchActivity
-                .this, SearchActivity.this);
+        articleLoader = new ArticleLoader(articles, articlesAdapter, layoutManager, SearchActivity.this);
+
         rvArticles.addOnScrollListener(articleLoader.scrollListener);
 
         srlArticles.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -180,6 +204,10 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
     public void showEmptyView() {
 
         rvArticles.setVisibility(View.GONE);
+
+        String noResults = getResources().getString(R.string.no_article_information);
+        tvNoData.setText(noResults);
+
         tvNoData.setVisibility(View.VISIBLE);
         pbArticlesLoading.setVisibility(View.GONE);
     }
@@ -189,5 +217,17 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
         rvArticles.setVisibility(View.VISIBLE);
         tvNoData.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNetworkDisconnectedView() {
+
+        rvArticles.setVisibility(View.GONE);
+
+        String networkDisconnected = getResources().getString(R.string.network_disconnected);
+        tvNoData.setText(networkDisconnected);
+
+        tvNoData.setVisibility(View.VISIBLE);
+        pbArticlesLoading.setVisibility(View.GONE);
     }
 }

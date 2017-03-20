@@ -1,5 +1,6 @@
 package com.deonna.newssearch.utilities;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -40,6 +41,8 @@ public class ArticleLoader {
     private RefreshListener refreshListener;
     private EmptyViewListener emptyViewListener;
 
+    private Context context;
+
     //Current filters
     public String query = null;
     private String sortOrder = null;
@@ -52,23 +55,20 @@ public class ArticleLoader {
     public ArticleLoader(List<Article> articles,
                          ArticlesAdapter articlesAdapter,
                          StaggeredGridLayoutManager layoutManager,
-                         ProgressBarListener progressBarListener,
-                         ScrollToTopListener scrollToTopListener,
-                         SnackbarListener snackbarListener,
-                         RefreshListener refreshListener,
-                         EmptyViewListener emptyViewListener
+                         Context context
     ) {
 
         client = new NewYorkTimesClient();
-
+        this.context = context;
         this.articles = articles;
         this.articlesAdapter = articlesAdapter;
 
         scrollListener = initializeEndlessScrollListener(layoutManager);
-        this.progressBarListener = progressBarListener;
-        this.scrollToTopListener = scrollToTopListener;
-        this.snackbarListener = snackbarListener;
-        this.refreshListener = refreshListener;
+        this.progressBarListener =  (ProgressBarListener) context;
+        this.scrollToTopListener = (ScrollToTopListener) context;
+        this.snackbarListener = (SnackbarListener) context;
+        this.refreshListener = (RefreshListener) context;
+        this.emptyViewListener = (EmptyViewListener) context;
     }
 
     private EndlessRecyclerViewScrollListener initializeEndlessScrollListener(StaggeredGridLayoutManager layoutManager) {
@@ -115,7 +115,12 @@ public class ArticleLoader {
                 @Override
                 public void onFailure(Call<QueryResponse> call, Throwable t) {
 
-                    emptyViewListener.showEmptyView();
+                    if (Utils.isNetworkAvailable(context)) {
+                        emptyViewListener.showEmptyView();
+                    } else {
+                        emptyViewListener.showNetworkDisconnectedView();
+                    }
+
                     Log.e(TAG, "Error loading articles!");
                     t.printStackTrace();
                 }
@@ -207,7 +212,12 @@ public class ArticleLoader {
                     @Override
                     public void onFailure(Call<QueryResponse> call, Throwable t) {
 
-                        emptyViewListener.showEmptyView();
+                        if (Utils.isNetworkAvailable(context)) {
+                            emptyViewListener.showEmptyView();
+                        } else {
+                            emptyViewListener.showNetworkDisconnectedView();
+                        }
+
                         Log.e(TAG, "Error loading articles!");
                         t.printStackTrace();
                     }

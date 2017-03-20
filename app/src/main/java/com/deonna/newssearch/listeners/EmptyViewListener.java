@@ -4,4 +4,5 @@ public interface EmptyViewListener {
 
     public void showEmptyView();
     public void showNormalView();
+    public void showNetworkDisconnectedView();
 }
