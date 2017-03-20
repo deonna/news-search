@@ -14,7 +14,8 @@ import java.util.Locale;
 public class Article {
 
     public static final String URL_PREFIX = "http://www.nytimes.com/%s";
-    public static final String MAX_WIDTH = "600";
+    public static final String DATE_FORMAT_TO_PARSE = "yyyy-MM-dd'T'hh:mm:ssZ" ;
+    public static final String DESIRED_DATE_FORMAT = "M/dd/yyyy";
 
     public String url;
     public String thumbnail;
@@ -54,8 +55,8 @@ public class Article {
         try {
 
             if (dateToParse != null) {
-                Date date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ").parse(dateToParse);
-                return new SimpleDateFormat("M/dd/yyyy").format(date);
+                Date date = new SimpleDateFormat(DATE_FORMAT_TO_PARSE).parse(dateToParse);
+                return new SimpleDateFormat(DESIRED_DATE_FORMAT).format(date);
             } else {
                 return "";
             }

@@ -98,9 +98,9 @@ public class SearchActivity extends AppCompatActivity implements ArticlesFilterL
 
     private void setupFonts() {
 
-        Fonts.fontRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-        Fonts.fontLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
-        Fonts.fontBold = Typeface.createFromAsset(getAssets(), "OpenSans-Bold.ttf");
+        Fonts.fontRegular = Typeface.createFromAsset(getAssets(), Fonts.fontRegularName);
+        Fonts.fontLight = Typeface.createFromAsset(getAssets(), Fonts.fontLightName);
+        Fonts.fontBold = Typeface.createFromAsset(getAssets(), Fonts.fontBoldName);
     }
 
     public void monitorConnectivity() {

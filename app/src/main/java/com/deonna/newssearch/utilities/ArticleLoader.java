@@ -24,6 +24,7 @@ import retrofit2.Response;
 public class ArticleLoader {
 
     private static final String TAG = ArticleLoader.class.getSimpleName();
+    private static final String ERROR = "Error loading articles!";
 
     public static final String KEY_NEWEST = "newest";
     public static final String KEY_OLDEST = "oldest";
@@ -121,7 +122,7 @@ public class ArticleLoader {
                         emptyViewListener.showNetworkDisconnectedView();
                     }
 
-                    Log.e(TAG, "Error loading articles!");
+                    Log.e(TAG, ERROR);
                     t.printStackTrace();
                 }
         });
@@ -218,7 +219,7 @@ public class ArticleLoader {
                             emptyViewListener.showNetworkDisconnectedView();
                         }
 
-                        Log.e(TAG, "Error loading articles!");
+                        Log.e(TAG, ERROR);
                         t.printStackTrace();
                     }
                 }

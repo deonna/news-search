@@ -101,13 +101,6 @@ public class FilterFragment extends DialogFragment {
                 dpBeginDate.getDayOfMonth()
         );
 
-        //TODO: give option
-        // to
-        // make begin
-        // date null
-        // (have no
-        // begin date)
-
         articlesFilter.addTopic(tvArts.getText().toString(), cbArts.isChecked());
         articlesFilter.addTopic(tvFashion.getText().toString(), cbFashion.isChecked());
         articlesFilter.addTopic(tvSports.getText().toString(), cbSports.isChecked());
